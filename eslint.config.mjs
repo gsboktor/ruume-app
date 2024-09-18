@@ -21,7 +21,14 @@ const compat = new FlatCompat({
 
 export default [
   {
-    ignores: ['**/node_modules', '**/app-example', '**/babel.config.js', '**/eslint.config.mjs', '**/scripts'],
+    ignores: [
+      '**/node_modules',
+      '**/app-example',
+      '**/babel.config.js',
+      '**/eslint.config.mjs',
+      '**/scripts',
+      '**/components-example',
+    ],
   },
   ...fixupConfigRules(
     compat.extends(
