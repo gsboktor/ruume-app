@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
+import * as Haptics from 'expo-haptics';
 import styled from 'styled-components/native';
 
 const LandingActionButton = styled(View)<{ pressed: boolean }>`
@@ -17,7 +18,11 @@ const LandingActionButton = styled(View)<{ pressed: boolean }>`
 
 export const LandingAction = () => {
   return (
-    <Pressable onPress={() => {}}>
+    <Pressable
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      }}
+    >
       {({ pressed }) => {
         return (
           <LandingActionButton pressed={pressed}>
