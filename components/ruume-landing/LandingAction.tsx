@@ -18,27 +18,29 @@ const LandingActionButton = styled(View)<{ pressed: boolean }>`
 
 export const LandingAction = () => {
   return (
-    <Pressable
-      onPress={() => {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-      }}
-    >
-      {({ pressed }) => {
-        return (
-          <LandingActionButton pressed={pressed}>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: '300',
-                width: '100%',
-                textAlign: 'center',
-              }}
-            >
-              Let&apos;s Ruume
-            </Text>
-          </LandingActionButton>
-        );
-      }}
-    </Pressable>
+    <>
+      <Pressable
+        onPress={() => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+        }}
+      >
+        {({ pressed }) => {
+          return (
+            <LandingActionButton pressed={pressed}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: '300',
+                  width: '100%',
+                  textAlign: 'center',
+                }}
+              >
+                Let&apos;s Ruume
+              </Text>
+            </LandingActionButton>
+          );
+        }}
+      </Pressable>
+    </>
   );
 };
