@@ -28,6 +28,7 @@ export default [
       '**/eslint.config.mjs',
       '**/scripts',
       '**/components-example',
+      '**/metro.config.js',
     ],
   },
   ...fixupConfigRules(
