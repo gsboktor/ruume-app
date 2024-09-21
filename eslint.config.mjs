@@ -29,6 +29,8 @@ export default [
       '**/scripts',
       '**/components-example',
       '**/metro.config.js',
+      '**/ios',
+      '**/android',
     ],
   },
   ...fixupConfigRules(

@@ -10,6 +10,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { BaseText } from '@Ruume/components/shared';
+
 import * as Haptics from 'expo-haptics';
 import styled from 'styled-components/native';
 
@@ -26,9 +28,8 @@ const LandingActionButton = styled(Animated.View)`
   box-shadow: 0px 8px 10px rgba(93, 93, 93, 0.5);
 `;
 
-const LandingActionText = styled(Animated.Text)`
+const LandingActionText = styled(BaseText)`
   font-size: 20px;
-  font-weight: 300;
   width: 100%;
   text-align: center;
   overflow: hidden;
@@ -73,7 +74,11 @@ export const LandingAction = ({
   return (
     <Pressable onPress={handlePress}>
       <LandingActionButton style={animatedStyle}>
-        {contentVisible && <LandingActionText exiting={FadeOut.duration(100)}>Let&apos;s Ruume</LandingActionText>}
+        {contentVisible && (
+          <LandingActionText type="light" exiting={FadeOut.duration(100)}>
+            Let&apos;s Ruume
+          </LandingActionText>
+        )}
       </LandingActionButton>
     </Pressable>
   );
