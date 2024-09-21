@@ -1,5 +1,5 @@
-import React from 'react';
-import { SafeAreaView, View } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, Text, View } from 'react-native';
 
 import { LandingAction } from '@Ruume/components';
 
@@ -19,10 +19,17 @@ const Container = styled(View)`
 `;
 
 export const RuumeLanding = () => {
+  const [landingContentVisible, setLandingContentVisible] = useState(false);
   return (
     <Container>
       <SafeAreaView>
-        <LandingAction />
+        {!landingContentVisible ? (
+          <LandingAction setLandingContentVisible={setLandingContentVisible} />
+        ) : (
+          <View>
+            <Text style={{ color: '#fff' }}>Hello Landing Content!</Text>
+          </View>
+        )}
       </SafeAreaView>
     </Container>
   );
