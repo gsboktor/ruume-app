@@ -6,6 +6,7 @@ import { LandingAction } from '@Ruume/components/ruume-landing';
 import { BaseText } from '@Ruume/components/shared';
 
 import { useFonts } from 'expo-font';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 const Container = styled(View)`
@@ -14,7 +15,6 @@ const Container = styled(View)`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #000;
   width: 100%;
   height: 100%;
   justify-content: center;
@@ -23,6 +23,7 @@ const Container = styled(View)`
 
 export const RuumeLanding = () => {
   const [landingContentVisible, setLandingContentVisible] = useState(false);
+  const router = useRouter();
 
   const [loaded] = useFonts({
     SpaceMono: require('@Ruume/assets/fonts/SpaceMono-Regular.ttf'),
@@ -39,19 +40,22 @@ export const RuumeLanding = () => {
     return null;
   }
 
+  const handleLandingComplete = () => {
+    setLandingContentVisible(true);
+    router.replace('/(tabs)/ruume-home');
+  };
+
   return (
     <Container>
       <SafeAreaView>
         {!landingContentVisible ? (
-          <LandingAction setLandingContentVisible={setLandingContentVisible} />
+          <LandingAction setLandingContentVisible={handleLandingComplete} />
         ) : (
-          <>
-            <View>
-              <BaseText type="bold" style={{ color: '#fff' }}>
-                Hello Landing With Font Sans!
-              </BaseText>
-            </View>
-          </>
+          <View>
+            <BaseText type="bold" style={{ color: '#fff' }}>
+              Transitioning to Ruume Home...
+            </BaseText>
+          </View>
         )}
       </SafeAreaView>
     </Container>

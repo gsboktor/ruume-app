@@ -17,8 +17,6 @@ import styled from 'styled-components/native';
 
 const LandingActionButton = styled(Animated.View)`
   position: relative;
-  width: 275px;
-  height: 90px;
   background-color: #fff;
   justify-content: center;
   border-radius: 50%;
@@ -41,7 +39,7 @@ export const LandingAction = ({
   setLandingContentVisible: (visible: boolean) => void;
 }) => {
   const width = useSharedValue(275);
-  const height = useSharedValue(90);
+  const height = useSharedValue(100);
 
   const [contentVisible, setContentVisible] = useState(true);
 
