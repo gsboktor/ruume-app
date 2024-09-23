@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -70,7 +69,7 @@ export default function TabBarItem({ onPress, idx, isFocused, tabBarIcon }: TabB
   const iconRotationStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${iconRotation.value}deg` }],
   }));
-  const scale = useAnimatedStyle(() => ({
+  const scaleStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scaleSharedValue.value }],
   }));
 
@@ -99,24 +98,20 @@ export default function TabBarItem({ onPress, idx, isFocused, tabBarIcon }: TabB
       style={isMain ? { zIndex: 100 } : {}}
     >
       {idx === 0 && (
-        <StyledLeftTabBarItemContainer style={[scale]}>
-          <View style={{ marginRight: 48 }}>
-            <Animated.View style={iconRotationStyle}>{Icon}</Animated.View>
-          </View>
+        <StyledLeftTabBarItemContainer style={[scaleStyle]}>
+          <Animated.View style={[iconRotationStyle, { marginRight: 48 }]}>{Icon}</Animated.View>
         </StyledLeftTabBarItemContainer>
       )}
       {idx === 1 && (
-        <StyledBlackCircle style={[scale]}>
+        <StyledBlackCircle style={[scaleStyle]}>
           <StyledMainTabBarItemContainer>
             <Animated.View style={iconRotationStyle}>{Icon}</Animated.View>
           </StyledMainTabBarItemContainer>
         </StyledBlackCircle>
       )}
       {idx === 2 && (
-        <StyledRightTabBarItemContainer style={[scale]}>
-          <View style={{ marginLeft: 48 }}>
-            <Animated.View style={iconRotationStyle}>{Icon}</Animated.View>
-          </View>
+        <StyledRightTabBarItemContainer style={[scaleStyle]}>
+          <Animated.View style={[iconRotationStyle, { marginLeft: 48 }]}>{Icon}</Animated.View>
         </StyledRightTabBarItemContainer>
       )}
     </HapticPressable>

@@ -26,19 +26,19 @@ export default function TabLayout() {
       <Tabs.Screen
         name="ruume-profile"
         options={{
-          tabBarIcon: ({ color }) => <Settings fill={color} width={24} height={24} />,
+          tabBarIcon: ({ focused }) => <Settings fill={focused ? '#000' : '#2c2c2c'} width={24} height={24} />,
         }}
       />
       <Tabs.Screen
         name="ruume-home"
         options={{
-          tabBarIcon: ({ color }) => <Home fill={color} width={24} height={24} />,
+          tabBarIcon: ({ focused }) => <Home fill={focused ? '#000' : '#2c2c2c'} width={24} height={24} />,
         }}
       />
       <Tabs.Screen
         name="ruume-search"
         options={{
-          tabBarIcon: ({ color }) => <Search fill={color} width={24} height={24} />,
+          tabBarIcon: ({ focused }) => <Search fill={focused ? '#000' : '#2c2c2c'} width={24} height={24} />,
         }}
       />
     </Tabs>
