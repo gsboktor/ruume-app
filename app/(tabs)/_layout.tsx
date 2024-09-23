@@ -1,7 +1,6 @@
 /* eslint-disable simpleImportSort/imports */
 import React from 'react';
 
-// import { TabBarIcon } from '@Ruume/components-example/navigation/TabBarIcon';
 import { TabBar } from '@Ruume/components/tab-bar';
 import { Colors } from '@Ruume/constants/Colors';
 import { useColorScheme } from '@Ruume/hooks/useColorScheme';
