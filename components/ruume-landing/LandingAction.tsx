@@ -13,6 +13,7 @@ import Animated, {
 import { BaseText } from '@Ruume/components/shared';
 
 import * as Haptics from 'expo-haptics';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 const LandingActionButton = styled(Animated.View)`
@@ -33,15 +34,18 @@ const LandingActionText = styled(BaseText)`
   overflow: hidden;
 `;
 
-export const LandingAction = ({
-  setLandingContentVisible,
-}: {
-  setLandingContentVisible: (visible: boolean) => void;
-}) => {
+export const LandingAction = () => {
+  const router = useRouter();
   const width = useSharedValue(275);
   const height = useSharedValue(100);
 
   const [contentVisible, setContentVisible] = useState(true);
+
+  const routeWithDelay = useCallback(() => {
+    setTimeout(() => {
+      router.replace('/(tabs)/ruume-home');
+    }, 250);
+  }, [router]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     width: width.value,
@@ -60,14 +64,14 @@ export const LandingAction = ({
             25,
             withTiming(0, { duration: 200 }, (finished) => {
               if (finished) {
-                runOnJS(setLandingContentVisible)(true);
+                runOnJS(routeWithDelay)();
               }
             }),
           );
         }
       }),
     );
-  }, [width, height, setLandingContentVisible]);
+  }, [width, height, routeWithDelay]);
 
   return (
     <Pressable onPress={handlePress}>

@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-import React, { useState } from 'react';
+import React from 'react';
 import { SafeAreaView, View } from 'react-native';
 
 import { LandingAction } from '@Ruume/components/ruume-landing';
-import { BaseText } from '@Ruume/components/shared';
 
 import { useFonts } from 'expo-font';
-import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import styled from 'styled-components/native';
 
@@ -23,9 +21,6 @@ const Container = styled(View)`
 `;
 
 export const RuumeLanding = () => {
-  const [landingContentVisible, setLandingContentVisible] = useState(false);
-  const router = useRouter();
-
   const [loaded] = useFonts({
     SpaceMono: require('@Ruume/assets/fonts/SpaceMono-Regular.ttf'),
     DMSans: require('@Ruume/assets/fonts/DMSans-Regular.ttf'),
@@ -41,25 +36,12 @@ export const RuumeLanding = () => {
     return null;
   }
 
-  const handleLandingComplete = () => {
-    setLandingContentVisible(true);
-    router.replace('/(tabs)/ruume-home');
-  };
-
   return (
     <>
       <StatusBar style="light" />
       <Container>
         <SafeAreaView>
-          {!landingContentVisible ? (
-            <LandingAction setLandingContentVisible={handleLandingComplete} />
-          ) : (
-            <View>
-              <BaseText type="bold" style={{ color: '#fff' }}>
-                Transitioning to Ruume Home...
-              </BaseText>
-            </View>
-          )}
+          <LandingAction />
         </SafeAreaView>
       </Container>
     </>
