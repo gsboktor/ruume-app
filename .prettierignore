@@ -1,2 +1,12 @@
 **/node_modules
 **/app-example
+**/metro.config.js
+**/ios
+**/android
+**/babel.config.js
+**/eslint.config.mjs
+**/scripts
+**/components-example
+**/assets
+**/types
+**/utils

@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { Pressable } from 'react-native';
 import Animated, {
   FadeOut,
   runOnJS,
@@ -10,15 +9,14 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { BaseText } from '@Ruume/components/shared';
+import { BaseText, HapticPressable } from '@Ruume/components/shared';
 
-import * as Haptics from 'expo-haptics';
+import { ImpactFeedbackStyle } from 'expo-haptics';
+import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
 const LandingActionButton = styled(Animated.View)`
   position: relative;
-  width: 275px;
-  height: 90px;
   background-color: #fff;
   justify-content: center;
   border-radius: 50%;
@@ -35,15 +33,18 @@ const LandingActionText = styled(BaseText)`
   overflow: hidden;
 `;
 
-export const LandingAction = ({
-  setLandingContentVisible,
-}: {
-  setLandingContentVisible: (visible: boolean) => void;
-}) => {
+export const LandingAction = () => {
+  const router = useRouter();
   const width = useSharedValue(275);
-  const height = useSharedValue(90);
+  const height = useSharedValue(100);
 
   const [contentVisible, setContentVisible] = useState(true);
+
+  const routeWithDelay = useCallback(() => {
+    setTimeout(() => {
+      router.replace('/(tabs)/ruume-home');
+    }, 250);
+  }, [router]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     width: width.value,
@@ -52,8 +53,6 @@ export const LandingAction = ({
 
   const handlePress = useCallback(() => {
     setContentVisible(false);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-
     width.value = withSequence(
       withTiming(290, { duration: 75 }),
       withTiming(12, { duration: 300 }, (finished) => {
@@ -62,17 +61,17 @@ export const LandingAction = ({
             25,
             withTiming(0, { duration: 200 }, (finished) => {
               if (finished) {
-                runOnJS(setLandingContentVisible)(true);
+                runOnJS(routeWithDelay)();
               }
             }),
           );
         }
       }),
     );
-  }, [width, height, setLandingContentVisible]);
+  }, [width, height, routeWithDelay]);
 
   return (
-    <Pressable onPress={handlePress}>
+    <HapticPressable onPress={handlePress} hapticWeight={ImpactFeedbackStyle.Heavy}>
       <LandingActionButton style={animatedStyle}>
         {contentVisible && (
           <LandingActionText type="light" exiting={FadeOut.duration(100)}>
@@ -80,6 +79,6 @@ export const LandingAction = ({
           </LandingActionText>
         )}
       </LandingActionButton>
-    </Pressable>
+    </HapticPressable>
   );
 };
