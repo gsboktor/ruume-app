@@ -7,6 +7,7 @@ import { BaseText } from '@Ruume/components/shared';
 
 import { useFonts } from 'expo-font';
 import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import styled from 'styled-components/native';
 
 const Container = styled(View)`
@@ -46,18 +47,21 @@ export const RuumeLanding = () => {
   };
 
   return (
-    <Container>
-      <SafeAreaView>
-        {!landingContentVisible ? (
-          <LandingAction setLandingContentVisible={handleLandingComplete} />
-        ) : (
-          <View>
-            <BaseText type="bold" style={{ color: '#fff' }}>
-              Transitioning to Ruume Home...
-            </BaseText>
-          </View>
-        )}
-      </SafeAreaView>
-    </Container>
+    <>
+      <StatusBar style="light" />
+      <Container>
+        <SafeAreaView>
+          {!landingContentVisible ? (
+            <LandingAction setLandingContentVisible={handleLandingComplete} />
+          ) : (
+            <View>
+              <BaseText type="bold" style={{ color: '#fff' }}>
+                Transitioning to Ruume Home...
+              </BaseText>
+            </View>
+          )}
+        </SafeAreaView>
+      </Container>
+    </>
   );
 };

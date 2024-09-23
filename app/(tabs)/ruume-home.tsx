@@ -3,6 +3,7 @@ import { View } from 'react-native';
 
 import { BaseText } from '@Ruume/components/shared';
 
+import { StatusBar } from 'expo-status-bar';
 import styled from 'styled-components/native';
 
 const StyledHomeContainer = styled(View)`
@@ -12,10 +13,13 @@ const StyledHomeContainer = styled(View)`
 
 export default function RuumeHome() {
   return (
-    <StyledHomeContainer>
-      <View style={{ flex: 1, alignItems: 'center', marginTop: 100 }}>
-        <BaseText type="bold">Welcome to Ruume Home!</BaseText>
-      </View>
-    </StyledHomeContainer>
+    <>
+      <StatusBar style="light" />
+      <StyledHomeContainer>
+        <View style={{ flex: 1, alignItems: 'center', marginTop: 100 }}>
+          <BaseText type="bold">Welcome to Ruume Home!</BaseText>
+        </View>
+      </StyledHomeContainer>
+    </>
   );
 }

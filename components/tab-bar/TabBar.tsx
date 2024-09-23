@@ -22,8 +22,8 @@ const StyledTabBarContainer = styled(Animated.View)`
   background-color: #fff;
   display: flex;
   flex-direction: row;
-  width: 175px;
   height: 80px;
+  width: 175px;
   border-radius: 100px;
   position: absolute;
   bottom: 40px;
