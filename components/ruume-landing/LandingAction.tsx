@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { Pressable } from 'react-native';
 import Animated, {
   FadeOut,
   runOnJS,
@@ -10,9 +9,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { BaseText } from '@Ruume/components/shared';
+import { BaseText, HapticPressable } from '@Ruume/components/shared';
 
-import * as Haptics from 'expo-haptics';
+import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import styled from 'styled-components/native';
 
@@ -54,8 +53,6 @@ export const LandingAction = () => {
 
   const handlePress = useCallback(() => {
     setContentVisible(false);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-
     width.value = withSequence(
       withTiming(290, { duration: 75 }),
       withTiming(12, { duration: 300 }, (finished) => {
@@ -74,7 +71,7 @@ export const LandingAction = () => {
   }, [width, height, routeWithDelay]);
 
   return (
-    <Pressable onPress={handlePress}>
+    <HapticPressable onPress={handlePress} hapticWeight={ImpactFeedbackStyle.Heavy}>
       <LandingActionButton style={animatedStyle}>
         {contentVisible && (
           <LandingActionText type="light" exiting={FadeOut.duration(100)}>
@@ -82,6 +79,6 @@ export const LandingAction = () => {
           </LandingActionText>
         )}
       </LandingActionButton>
-    </Pressable>
+    </HapticPressable>
   );
 };

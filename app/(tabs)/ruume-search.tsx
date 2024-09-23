@@ -5,14 +5,15 @@ import { BaseText } from '@Ruume/components/shared';
 
 import styled from 'styled-components/native';
 
-const StyledProfileContainer = styled(View)`
+const StyledSearchContainer = styled(View)`
   height: 100%;
   background-color: black;
 `;
-export default function RuumeProfile() {
+
+export default function RuumeSearch() {
   return (
-    <StyledProfileContainer>
-      <BaseText>Ruume Profile</BaseText>
-    </StyledProfileContainer>
+    <StyledSearchContainer>
+      <BaseText>Ruume Search</BaseText>
+    </StyledSearchContainer>
   );
 }
