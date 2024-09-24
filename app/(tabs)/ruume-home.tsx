@@ -10,6 +10,7 @@ import styled from 'styled-components/native';
 const StyledHomeContainer = styled(View)`
   height: 100%;
   background-color: black;
+  padding: 16px;
 `;
 
 export default function RuumeHome() {
