@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -59,6 +59,7 @@ export type TabBarItemProps = {
 };
 
 export default function TabBarItem({ onPress, idx, isFocused, tabBarIcon }: TabBarItemProps) {
+  console.log('rerender');
   const isMain = idx === 1;
   const Icon = tabBarIcon && tabBarIcon({ focused: isFocused, color: '#000', size: 24 });
   const firstMount = useRef(true);
@@ -73,7 +74,7 @@ export default function TabBarItem({ onPress, idx, isFocused, tabBarIcon }: TabB
     transform: [{ scale: scaleSharedValue.value }],
   }));
 
-  useEffect(() => {
+  useMemo(() => {
     if (isFocused) {
       if (!firstMount.current) {
         iconRotation.value = withRepeat(
@@ -89,7 +90,7 @@ export default function TabBarItem({ onPress, idx, isFocused, tabBarIcon }: TabB
       scaleSharedValue.value = withTiming(1, { duration: 250, easing: Easing.elastic(1.5) });
     }
     firstMount.current = false;
-  }, [iconRotation, isFocused, isMain, scaleSharedValue]);
+  }, [isFocused, isMain, iconRotation, scaleSharedValue, firstMount]);
 
   return (
     <HapticPressable
