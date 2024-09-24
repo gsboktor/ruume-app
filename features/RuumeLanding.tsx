@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import React from 'react';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 
 import { LandingAction } from '@Ruume/components/ruume-landing';
 
@@ -40,9 +40,7 @@ export const RuumeLanding = () => {
     <>
       <StatusBar style="light" />
       <Container>
-        <SafeAreaView>
-          <LandingAction />
-        </SafeAreaView>
+        <LandingAction />
       </Container>
     </>
   );
