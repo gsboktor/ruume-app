@@ -10,8 +10,8 @@ import styled from 'styled-components/native';
 const BarContainer = styled(View)`
   position: relative;
   background-color: #000;
-  width: 100%;
-  height: 120px;
+  /* width: 100%;
+  height: 120px; */
   display: flex;
   justify-content: center;
   align-items: center;

@@ -84,9 +84,9 @@ export default function TabBarItem({ onPress, idx, isFocused, tabBarIcon }: TabB
           2,
         );
       }
-      scaleSharedValue.value = withTiming(isMain ? 1.2 : 1.15, { duration: 100, easing: Easing.linear });
+      scaleSharedValue.value = withTiming(isMain ? 1.2 : 1.15, { duration: 250, easing: Easing.elastic(1.5) });
     } else {
-      scaleSharedValue.value = withTiming(1, { duration: 100, easing: Easing.linear });
+      scaleSharedValue.value = withTiming(1, { duration: 250, easing: Easing.elastic(1.5) });
     }
     firstMount.current = false;
   }, [iconRotation, isFocused, isMain, scaleSharedValue]);
