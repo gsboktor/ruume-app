@@ -59,7 +59,6 @@ export type TabBarItemProps = {
 };
 
 export default function TabBarItem({ onPress, idx, isFocused, tabBarIcon }: TabBarItemProps) {
-  console.log('rerender');
   const isMain = idx === 1;
   const Icon = tabBarIcon && tabBarIcon({ focused: isFocused, color: '#000', size: 24 });
   const firstMount = useRef(true);
