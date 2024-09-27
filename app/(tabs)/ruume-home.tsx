@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import Settings from '@Ruume/assets/icons/settings.svg';
 import { BaseText } from '@Ruume/components/shared';
 
 import { StatusBar } from 'expo-status-bar';
-import styled from 'styled-components/native';
+import styled, { ThemeContext } from 'styled-components/native';
 
 const StyledHomeContainer = styled(View)`
   height: 100%;
@@ -14,11 +14,12 @@ const StyledHomeContainer = styled(View)`
 `;
 
 export default function RuumeHome() {
+  const theme = useContext(ThemeContext);
   return (
     <>
       <StyledHomeContainer>
         <StatusBar style="light" />
-        <BaseText type="bold" style={{ color: 'white' }}>
+        <BaseText type="bold" style={{ color: theme?.text }}>
           Welcome to Ruume Home!
         </BaseText>
         <Settings width={24} height={24} fill="white" />
