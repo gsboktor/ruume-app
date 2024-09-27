@@ -17,7 +17,7 @@ import styled from 'styled-components/native';
 
 const LandingActionButton = styled(Animated.View)`
   position: relative;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme?.lightBackground};
   justify-content: center;
   border-radius: 50%;
   align-items: center;
