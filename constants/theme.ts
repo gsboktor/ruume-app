@@ -9,10 +9,10 @@ export const appTheme = {
     tabIconSelected: Colors.black,
   },
   dark: {
-    text: Colors.black,
-    background: Colors.white,
-    lightBackground: Colors.black,
+    text: Colors.white,
+    background: Colors.black,
+    lightBackground: Colors.white,
     tabIconDefault: Colors.gray,
-    tabIconSelected: Colors.white,
+    tabIconSelected: Colors.black,
   },
 };
