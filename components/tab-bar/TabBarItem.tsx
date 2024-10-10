@@ -16,7 +16,7 @@ import styled from 'styled-components/native';
 const StyledLeftTabBarItemContainer = styled(Animated.View)`
   width: 100px;
   height: 60px;
-  border-radius: 50%;
+  border-radius: 50px;
   background-color: #fff;
   align-items: center;
   justify-content: center;
@@ -26,7 +26,7 @@ const StyledLeftTabBarItemContainer = styled(Animated.View)`
 const StyledRightTabBarItemContainer = styled(Animated.View)`
   width: 100px;
   height: 60px;
-  border-radius: 50%;
+  border-radius: 50px;
   background-color: #fff;
   align-items: center;
   justify-content: center;
@@ -36,7 +36,7 @@ const StyledRightTabBarItemContainer = styled(Animated.View)`
 const StyledMainTabBarItemContainer = styled(Animated.View)`
   width: 60px;
   height: 60px;
-  border-radius: 50%;
+  border-radius: 50px;
   background-color: #fff;
   align-items: center;
   justify-content: center;
@@ -45,7 +45,7 @@ const StyledMainTabBarItemContainer = styled(Animated.View)`
 const StyledBlackCircle = styled(Animated.View)`
   width: 80px;
   height: 80px;
-  border-radius: 50%;
+  border-radius: 50px;
   background-color: #000;
   align-items: center;
   justify-content: center;

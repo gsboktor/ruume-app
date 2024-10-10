@@ -9,8 +9,8 @@
     "start:dev:ios": "bunx react-devtools & expo start --clear --ios",
     "start:dev:android": "bunx react-devtools & expo start --clear --android",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "eslint .",
@@ -43,7 +43,9 @@
     "react-native-reanimated": "~3.10.1",
     "react-native-safe-area-context": "4.10.5",
     "react-native-screens": "3.31.1",
-    "react-native-web": "~0.19.10"
+    "react-native-svg": "^15.7.1",
+    "react-native-web": "~0.19.10",
+    "styled-components": "^6.1.13"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -67,7 +69,6 @@
     "react-devtools": "^5.3.1",
     "react-native-svg-transformer": "^1.5.0",
     "react-test-renderer": "18.2.0",
-    "styled-components": "^6.1.13",
     "typescript": "~5.3.3"
   },
   "private": true
