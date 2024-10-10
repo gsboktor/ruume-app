@@ -19,7 +19,7 @@ const LandingActionButton = styled(Animated.View)`
   position: relative;
   background-color: ${({ theme }) => theme?.lightBackground};
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 50px;
   align-items: center;
   flex-wrap: wrap;
   text-align: center;
