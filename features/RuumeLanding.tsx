@@ -23,13 +23,12 @@ const Container = styled(View)`
 export const RuumeLanding = () => {
   const [loaded] = useFonts({
     SpaceMono: require('@Ruume/assets/fonts/SpaceMono-Regular.ttf'),
-    DMSans: require('@Ruume/assets/fonts/DMSans-Regular.ttf'),
-    DMSansBold: require('@Ruume/assets/fonts/DMSans-Bold.ttf'),
-    DMSansLight: require('@Ruume/assets/fonts/DMSans-Light.ttf'),
-    DMSansMedium: require('@Ruume/assets/fonts/DMSans-Medium.ttf'),
-    DMSansSemiBold: require('@Ruume/assets/fonts/DMSans-SemiBold.ttf'),
-    DMSansThin: require('@Ruume/assets/fonts/DMSans-Thin.ttf'),
-    DMSansExtraLight: require('@Ruume/assets/fonts/DMSans-ExtraLight.ttf'),
+    Gabarito: require('@Ruume/assets/fonts/Gabarito/Gabarito-Regular.ttf'),
+    GabaritoBold: require('@Ruume/assets/fonts/Gabarito/Gabarito-Bold.ttf'),
+    GabaritoMedium: require('@Ruume/assets/fonts/Gabarito/Gabarito-Medium.ttf'),
+    GabaritoSemiBold: require('@Ruume/assets/fonts/Gabarito/Gabarito-SemiBold.ttf'),
+    GabaritoExtraBold: require('@Ruume/assets/fonts/Gabarito/Gabarito-ExtraBold.ttf'),
+    GrandHotel: require('@Ruume/assets/fonts/GrandHotel/GrandHotel-Regular.ttf'),
   });
 
   if (!loaded) {

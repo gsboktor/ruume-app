@@ -19,7 +19,7 @@ export default function RuumeHome() {
     <>
       <StyledHomeContainer>
         <StatusBar style="light" />
-        <BaseText type="bold" style={{ color: theme?.text }}>
+        <BaseText type="default" style={{ color: theme?.text }}>
           Welcome to Ruume Home!
         </BaseText>
         <Settings width={24} height={24} fill="white" />
