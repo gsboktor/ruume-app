@@ -5,16 +5,16 @@ import Animated, { AnimatedProps } from 'react-native-reanimated';
 import styled from 'styled-components/native';
 
 export type BaseTextProps = AnimatedProps<TextProps> & {
-  type?: 'default' | 'light' | 'extraLight' | 'bold' | 'semiBold' | 'thin';
+  type?: 'default' | 'medium' | 'extraBold' | 'bold' | 'semiBold' | 'stylized';
 };
 
 const fontFamily = {
-  default: 'DMSans',
-  light: 'DMSansLight',
-  extraLight: 'DMSansExtraLight',
-  bold: 'DMSansBold',
-  semiBold: 'DMSansSemiBold',
-  thin: 'DMSansThin',
+  default: 'Gabarito',
+  medium: 'GabaritoMedium',
+  extraBold: 'GabaritoExtraBold',
+  bold: 'GabaritoBold',
+  semiBold: 'GabaritoSemiBold',
+  stylized: 'GrandHotel',
 };
 
 const BaseTextStyle = styled(Animated.Text)<{ type: BaseTextProps['type'] }>`

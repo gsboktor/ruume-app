@@ -28,7 +28,6 @@ const LandingActionButton = styled(Animated.View)`
 
 const LandingActionText = styled(BaseText)`
   font-size: 20px;
-  width: 100%;
   text-align: center;
   overflow: hidden;
 `;
@@ -74,9 +73,22 @@ export const LandingAction = () => {
     <HapticPressable onPress={handlePress} hapticWeight={ImpactFeedbackStyle.Heavy}>
       <LandingActionButton style={animatedStyle}>
         {contentVisible && (
-          <LandingActionText type="light" exiting={FadeOut.duration(100)}>
-            Let&apos;s Ruume
-          </LandingActionText>
+          <Animated.View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 8,
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+            }}
+            exiting={FadeOut.duration(100)}
+          >
+            <LandingActionText type="default">Let&apos;s</LandingActionText>
+            <LandingActionText type="stylized" style={{ fontSize: 30 }}>
+              Ruume
+            </LandingActionText>
+          </Animated.View>
         )}
       </LandingActionButton>
     </HapticPressable>
