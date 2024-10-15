@@ -41,7 +41,7 @@ export const LandingAction = () => {
 
   const routeWithDelay = useCallback(() => {
     setTimeout(() => {
-      router.replace('/(tabs)/ruume-home');
+      router.replace('/(auth)/ruume-auth-page');
     }, 250);
   }, [router]);
 
