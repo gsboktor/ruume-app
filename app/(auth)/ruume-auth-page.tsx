@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
+import RuumeAuthButtonGroup from '@Ruume/components/ruume-auth/RuumeAuthButtonGroup';
 import RuumeAuthForm from '@Ruume/components/ruume-auth/RuumeAuthForm';
 import RuumeAuthHeader from '@Ruume/components/ruume-auth/RuumeAuthHeader';
 
@@ -19,6 +20,7 @@ export default function RuumeAuthPage() {
     <AuthPageContainer>
       <RuumeAuthHeader />
       <RuumeAuthForm />
+      <RuumeAuthButtonGroup />
     </AuthPageContainer>
   );
 }
