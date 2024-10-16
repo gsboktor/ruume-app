@@ -1,19 +1,16 @@
 import React, { useContext } from 'react';
-import { Keyboard, TextInput, View } from 'react-native';
+import { Controller, useFormContext } from 'react-hook-form';
+import { View } from 'react-native';
 
 import Key from '@Ruume/assets/icons/key.svg';
 import NameCard from '@Ruume/assets/icons/name_card.svg';
 import Phone from '@Ruume/assets/icons/phone.svg';
+import { phoneNumberFormatter } from '@Ruume/utils/formatters';
+import { RuumeSignUpSchema } from '@Ruume/utils/schema';
+
+import { FormField } from '../shared';
 
 import styled, { ThemeContext } from 'styled-components/native';
-
-const FormFieldContainer = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: '100%';
-  gap: 8px;
-`;
 
 const FormGroupContainer = styled(View)`
   display: flex;
@@ -30,60 +27,82 @@ const FormContainer = styled(View)`
 export default function RuumeAuthForm() {
   const theme = useContext(ThemeContext);
 
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<RuumeSignUpSchema>();
+
   return (
     <FormContainer>
       <FormGroupContainer>
-        <FormFieldContainer>
-          <NameCard width={24} height={24} fill="white" />
-          <TextInput
-            placeholder="Phone Number"
-            inputMode="numeric"
-            style={{
-              fontSize: 38,
-              color: theme?.text,
-            }}
-            placeholderTextColor={theme?.textSubtle}
-            onSubmitEditing={Keyboard.dismiss}
-          />
-        </FormFieldContainer>
-        <FormFieldContainer>
-          <Key width={24} height={24} fill="white" />
-          <TextInput
-            placeholder="Name"
-            style={{
-              fontSize: 38,
-              color: theme?.text,
-            }}
-            placeholderTextColor={theme?.textSubtle}
-            onSubmitEditing={Keyboard.dismiss}
-          />
-        </FormFieldContainer>
+        <Controller
+          control={control}
+          name="phoneNumber"
+          render={({ field: { value, onChange } }) => (
+            <FormField
+              placeholder="Phone Number"
+              placeholderTextColor={theme?.textLightGray}
+              inputMode="tel"
+              onChangeText={(text) => {
+                const formatted = phoneNumberFormatter(text);
+                onChange(formatted);
+              }}
+              maxLength={10}
+              value={value}
+              icon={<Phone width={24} height={24} fill="white" />}
+              style={{ fontSize: 18, color: theme?.text }}
+              validationMessage={errors.phoneNumber?.message as string}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="name"
+          render={({ field: { value, onChange } }) => (
+            <FormField
+              placeholder="Name"
+              placeholderTextColor={theme?.textLightGray}
+              value={value}
+              style={{ fontSize: 18, color: theme?.text }}
+              onChangeText={onChange}
+              icon={<NameCard width={24} height={24} fill="white" />}
+              validationMessage={errors.name?.message as string}
+            />
+          )}
+        />
       </FormGroupContainer>
       <FormGroupContainer>
-        <FormFieldContainer>
-          <Phone width={24} height={24} fill="white" />
-          <TextInput
-            placeholder="Password"
-            style={{
-              fontSize: 38,
-              color: theme?.text,
-            }}
-            placeholderTextColor={theme?.textSubtle}
-            onSubmitEditing={Keyboard.dismiss}
-          />
-        </FormFieldContainer>
-        <FormFieldContainer>
-          <TextInput
-            placeholder="Re-enter Password"
-            style={{
-              fontSize: 26,
-              color: theme?.text,
-              paddingLeft: 32,
-            }}
-            placeholderTextColor={theme?.textSubtle}
-            onSubmitEditing={Keyboard.dismiss}
-          />
-        </FormFieldContainer>
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { value, onChange } }) => (
+            <FormField
+              placeholder="Password"
+              placeholderTextColor={theme?.textLightGray}
+              value={value}
+              style={{ fontSize: 18, color: theme?.text }}
+              icon={<Key width={24} height={24} fill="white" />}
+              onChangeText={onChange}
+              validationMessage={errors.password?.message as string}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="passwordConfirmation"
+          render={({ field: { value, onChange } }) => (
+            <View style={{ marginLeft: 32 }}>
+              <FormField
+                placeholder="Re-enter Password"
+                placeholderTextColor={theme?.textLightGray}
+                value={value}
+                style={{ fontSize: 18, color: theme?.text }}
+                onChangeText={onChange}
+                validationMessage={errors.passwordConfirmation?.message as string}
+              />
+            </View>
+          )}
+        />
       </FormGroupContainer>
     </FormContainer>
   );
