@@ -2,6 +2,7 @@ import React from 'react';
 import { useColorScheme } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
+import { NotificationToast } from '@Ruume/components/shared/NotificationToast';
 import { appTheme, Colors } from '@Ruume/constants';
 
 import { Stack } from 'expo-router';
@@ -13,6 +14,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider theme={colorScheme === 'dark' ? appTheme.dark : appTheme.light}>
         <SafeAreaView style={{ flex: 1, backgroundColor: Colors.black }}>
+          <NotificationToast />
           <Stack
             screenOptions={{
               headerShown: false,

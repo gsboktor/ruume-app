@@ -1,12 +1,16 @@
 import React, { useContext } from 'react';
-import { SubmitErrorHandler, SubmitHandler, useFormContext } from 'react-hook-form';
-import { KeyboardAvoidingView, useWindowDimensions, View } from 'react-native';
+import { FieldErrors, SubmitErrorHandler, SubmitHandler, useFormContext } from 'react-hook-form';
+import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { notificationAtom } from '@Ruume/store';
 import { RuumeSignUpSchema } from '@Ruume/utils/schema';
 
 import { BaseText, HapticPressable } from '../shared';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
+import { useRouter } from 'expo-router';
+import { useSetAtom } from 'jotai';
 import styled, { ThemeContext } from 'styled-components/native';
 
 const ButtonGroupContainer = styled(KeyboardAvoidingView)`
@@ -34,21 +38,39 @@ const ActiveButtonContainer = styled(View)`
 
 export default function RuumeAuthButtonGroup() {
   const theme = useContext(ThemeContext);
-  const screenHeight = useWindowDimensions().height;
+  const insets = useSafeAreaInsets();
+  const router = useRouter();
+  const setNotification = useSetAtom(notificationAtom);
 
   const { handleSubmit } = useFormContext<RuumeSignUpSchema>();
+
+  const composeErrorMessage = (errors: FieldErrors<RuumeSignUpSchema>) => {
+    return Object.values(errors)
+      .map((error) => error.message)
+      .join('\n');
+  };
+
   const onSubmit: SubmitHandler<RuumeSignUpSchema> = (data) => {
     console.log('Form submitted:', JSON.stringify(data));
+    Keyboard.dismiss();
+    router.replace('/(tabs)/ruume-home');
   };
 
   const onError: SubmitErrorHandler<RuumeSignUpSchema> = (errors) => {
     console.log('Form errors:', JSON.stringify(errors));
+    setNotification({
+      default: {
+        visible: true,
+        message: 'Sign up issue',
+        messageContent: composeErrorMessage(errors),
+      },
+    });
   };
 
   const handleFormSubmit = handleSubmit(onSubmit, onError);
 
   return (
-    <ButtonGroupContainer behavior="padding" keyboardVerticalOffset={screenHeight * 0.075}>
+    <ButtonGroupContainer behavior="padding" keyboardVerticalOffset={insets.top * 1.25}>
       <HapticPressable style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} onPress={handleFormSubmit}>
         <BaseText style={{ color: theme?.text, fontSize: 20 }}>Sign in</BaseText>
       </HapticPressable>

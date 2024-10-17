@@ -8,7 +8,7 @@ import { styled, ThemeContext } from 'styled-components/native';
 
 const HeaderContainer = styled(View)`
   flex-direction: column;
-  width: '100%';
+  width: 100%;
   align-items: center;
   justify-content: center;
 `;

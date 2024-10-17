@@ -3,7 +3,6 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { View } from 'react-native';
 
 import Key from '@Ruume/assets/icons/key.svg';
-import NameCard from '@Ruume/assets/icons/name_card.svg';
 import Phone from '@Ruume/assets/icons/phone.svg';
 import { phoneNumberFormatter } from '@Ruume/utils/formatters';
 import { RuumeSignUpSchema } from '@Ruume/utils/schema';
@@ -27,10 +26,7 @@ const FormContainer = styled(View)`
 export default function RuumeAuthForm() {
   const theme = useContext(ThemeContext);
 
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext<RuumeSignUpSchema>();
+  const { control } = useFormContext<RuumeSignUpSchema>();
 
   return (
     <FormContainer>
@@ -51,22 +47,6 @@ export default function RuumeAuthForm() {
               value={value}
               icon={<Phone width={24} height={24} fill="white" />}
               style={{ fontSize: 18, color: theme?.text }}
-              validationMessage={errors.phoneNumber?.message as string}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="name"
-          render={({ field: { value, onChange } }) => (
-            <FormField
-              placeholder="Name"
-              placeholderTextColor={theme?.textLightGray}
-              value={value}
-              style={{ fontSize: 18, color: theme?.text }}
-              onChangeText={onChange}
-              icon={<NameCard width={24} height={24} fill="white" />}
-              validationMessage={errors.name?.message as string}
             />
           )}
         />
@@ -83,7 +63,6 @@ export default function RuumeAuthForm() {
               style={{ fontSize: 18, color: theme?.text }}
               icon={<Key width={24} height={24} fill="white" />}
               onChangeText={onChange}
-              validationMessage={errors.password?.message as string}
             />
           )}
         />
@@ -98,7 +77,6 @@ export default function RuumeAuthForm() {
                 value={value}
                 style={{ fontSize: 18, color: theme?.text }}
                 onChangeText={onChange}
-                validationMessage={errors.passwordConfirmation?.message as string}
               />
             </View>
           )}

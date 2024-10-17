@@ -25,11 +25,11 @@ const AuthFormAndHeaderGroupContainer = styled(View)`
 `;
 
 export default function RuumeAuthPage() {
+  console.log('RuumeAuthPage');
   const methods = useForm<RuumeSignUpSchema>({
     resolver: yupResolver<RuumeSignUpSchema>(ruumeSignUpSchema),
     defaultValues: {
       phoneNumber: '',
-      name: '',
       password: '',
       passwordConfirmation: '',
     },
