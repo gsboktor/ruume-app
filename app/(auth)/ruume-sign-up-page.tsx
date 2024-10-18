@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { FieldErrors, SubmitErrorHandler, SubmitHandler, useFormContext } from 'react-hook-form';
+import { SubmitErrorHandler, SubmitHandler, useFormContext } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 
 import { RuumeAuthDisclaimer, RuumeFormSwitcher } from '@Ruume/components/ruume-auth';
@@ -7,6 +7,7 @@ import { SignUpForm } from '@Ruume/components/ruume-auth/forms';
 import { RuumeAuthButtonGroup } from '@Ruume/components/ruume-auth/RuumeAuthButtonGroup';
 import { useSignUpByPhone } from '@Ruume/hooks';
 import { notificationAtom } from '@Ruume/store';
+import { composeErrorMessage } from '@Ruume/utils/formatters';
 import { RuumeSignUpSchema } from '@Ruume/utils/schema';
 
 import { router } from 'expo-router';
@@ -22,7 +23,6 @@ const AuthPageContainer = styled(View)`
 `;
 
 export default function RuumeSignUpPage() {
-  const setNotification = useSetAtom(notificationAtom);
   const {
     mutate: signUpUser,
     isPending: signUpUserLoading,
@@ -30,10 +30,14 @@ export default function RuumeSignUpPage() {
     error: signUpUserError,
   } = useSignUpByPhone();
 
+  const setNotification = useSetAtom(notificationAtom);
+  const { handleSubmit } = useFormContext<RuumeSignUpSchema>();
+
   useEffect(() => {
     if (signUpUserResponse?.user) {
-      router.replace('/(auth)/ruume-otp-page');
+      router.push('/(auth)/ruume-otp-page');
     }
+
     if (signUpUserError) {
       setNotification({
         default: {
@@ -45,23 +49,16 @@ export default function RuumeSignUpPage() {
     }
   }, [setNotification, signUpUserError, signUpUserResponse?.user]);
 
-  const { handleSubmit } = useFormContext<RuumeSignUpSchema>();
-
-  const composeErrorMessage = (errors: FieldErrors<RuumeSignUpSchema>) => {
-    return Object.values(errors)
-      .map((error) => error.message)
-      .join('\n');
-  };
-
   const onSubmit: SubmitHandler<RuumeSignUpSchema> = (data) => {
     console.log('Form submitted:', JSON.stringify(data));
-    Keyboard.dismiss();
 
+    Keyboard.dismiss();
     signUpUser(data);
   };
 
   const onError: SubmitErrorHandler<RuumeSignUpSchema> = (errors) => {
     console.log('Form errors:', JSON.stringify(errors));
+
     Keyboard.dismiss();
     setNotification({
       default: {
@@ -72,8 +69,6 @@ export default function RuumeSignUpPage() {
     });
   };
 
-  const handleFormSubmit = handleSubmit(onSubmit, onError);
-
   return (
     <AuthPageContainer>
       <SignUpForm />
@@ -82,7 +77,11 @@ export default function RuumeSignUpPage() {
         secondaryLabel="Sign in"
         href="/(auth)/ruume-sign-in-page"
       />
-      <RuumeAuthButtonGroup label={'Sign up'} handleSubmit={handleFormSubmit} isLoading={signUpUserLoading} />
+      <RuumeAuthButtonGroup
+        label={'Sign up'}
+        handleSubmit={handleSubmit(onSubmit, onError)}
+        isLoading={signUpUserLoading}
+      />
       <RuumeAuthDisclaimer />
     </AuthPageContainer>
   );
