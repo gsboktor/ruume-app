@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
+import { RuumeAuthDisclaimer } from '@Ruume/components/ruume-auth';
 import RuumeAuthButtonGroup from '@Ruume/components/ruume-auth/RuumeAuthButtonGroup';
 import RuumeAuthForm from '@Ruume/components/ruume-auth/RuumeAuthForm';
 import RuumeAuthHeader from '@Ruume/components/ruume-auth/RuumeAuthHeader';
@@ -15,7 +16,8 @@ const AuthPageContainer = styled(View)`
   display: flex;
   flex: 1;
   padding: 16px;
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ theme }) => theme?.background};
+  justify-content: space-between;
 `;
 
 const AuthFormAndHeaderGroupContainer = styled(View)`
@@ -25,7 +27,6 @@ const AuthFormAndHeaderGroupContainer = styled(View)`
 `;
 
 export default function RuumeAuthPage() {
-  console.log('RuumeAuthPage');
   const methods = useForm<RuumeSignUpSchema>({
     resolver: yupResolver<RuumeSignUpSchema>(ruumeSignUpSchema),
     defaultValues: {
@@ -43,6 +44,7 @@ export default function RuumeAuthPage() {
           <RuumeAuthForm />
         </AuthFormAndHeaderGroupContainer>
         <RuumeAuthButtonGroup />
+        <RuumeAuthDisclaimer />
       </AuthPageContainer>
     </FormProvider>
   );

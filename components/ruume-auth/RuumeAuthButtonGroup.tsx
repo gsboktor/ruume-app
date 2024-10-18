@@ -17,7 +17,7 @@ const ButtonGroupContainer = styled(KeyboardAvoidingView)`
   display: flex;
   flex-direction: row;
   position: absolute;
-  bottom: 0;
+  bottom: 76px;
   align-self: center;
   align-items: center;
   justify-content: center;
