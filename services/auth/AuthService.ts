@@ -10,10 +10,9 @@ export class AuthService implements IAuthService {
     this.client = client;
   }
 
+  //TODO: scope this to only U.S. numbers, or go with configurable country code?
   async signUpWithPhone(signUpPayload: SignUpType) {
-    console.log('signUpPayload', signUpPayload);
     const phoneNumber = '+1' + signUpPayload.phoneNumber.replace(/\D+/g, '');
-    console.log('phoneNumber', phoneNumber);
 
     return await this.client.auth.signUp({
       phone: phoneNumber,
