@@ -35,7 +35,7 @@ const FormFieldContainer = styled(View)`
 const FormInputWrapper = styled(LinearGradient)`
   display: flex;
   flex: 3;
-  border-radius: 16px;
+  border-radius: 40px;
   padding: 16px;
 `;
 

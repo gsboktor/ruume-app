@@ -17,7 +17,7 @@ const ButtonGroupContainer = styled(KeyboardAvoidingView)`
   display: flex;
   flex-direction: row;
   position: absolute;
-  bottom: 76px;
+  bottom: 70px;
   align-self: center;
   align-items: center;
   justify-content: center;
@@ -36,7 +36,13 @@ const ActiveButtonContainer = styled(View)`
   width: 100%;
 `;
 
-export default function RuumeAuthButtonGroup() {
+export default function RuumeAuthButtonGroup({
+  formType,
+  setFormType,
+}: {
+  formType: 'signUp' | 'signIn';
+  setFormType: (formType: 'signUp' | 'signIn') => void;
+}) {
   const theme = useContext(ThemeContext);
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -61,7 +67,7 @@ export default function RuumeAuthButtonGroup() {
     setNotification({
       default: {
         visible: true,
-        message: 'Sign up issue',
+        message: 'Sign up problem',
         messageContent: composeErrorMessage(errors),
       },
     });
@@ -71,12 +77,15 @@ export default function RuumeAuthButtonGroup() {
 
   return (
     <ButtonGroupContainer behavior="padding" keyboardVerticalOffset={insets.top * 1.25}>
-      <HapticPressable style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} onPress={handleFormSubmit}>
+      <HapticPressable
+        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        onPress={formType === 'signUp' ? () => setFormType('signIn') : handleFormSubmit}
+      >
         <BaseText style={{ color: theme?.text, fontSize: 20 }}>Sign in</BaseText>
       </HapticPressable>
       <HapticPressable
         style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}
-        onPress={handleFormSubmit}
+        onPress={formType === 'signUp' ? handleFormSubmit : () => setFormType('signUp')}
         hapticWeight={ImpactFeedbackStyle.Heavy}
       >
         <ActiveButtonContainer>
