@@ -4,7 +4,7 @@ import { TextInput, TextInputProps, View } from 'react-native';
 import { BaseText } from './BaseText';
 
 import { LinearGradient } from 'expo-linear-gradient';
-import styled from 'styled-components/native';
+import styled, { useTheme } from 'styled-components/native';
 
 export type FormFieldProps = {
   icon?: React.ReactNode;
@@ -35,7 +35,7 @@ const FormFieldContainer = styled(View)`
 const FormInputWrapper = styled(LinearGradient)`
   display: flex;
   flex: 3;
-  border-radius: 40px;
+  border-radius: 20px;
   padding: 16px;
 `;
 
@@ -50,6 +50,7 @@ export const FormField = ({
   placeholderTextColor,
   ...rest
 }: FormFieldProps) => {
+  const theme = useTheme();
   return (
     <FormFieldContainer>
       <FormFieldMainContent>
@@ -68,7 +69,7 @@ export const FormField = ({
       </FormFieldMainContent>
 
       {validationMessage && (
-        <BaseText style={{ color: 'white', fontSize: 12, alignSelf: 'flex-end' }}>{validationMessage}</BaseText>
+        <BaseText style={{ color: theme?.text, fontSize: 12, alignSelf: 'flex-end' }}>{validationMessage}</BaseText>
       )}
     </FormFieldContainer>
   );

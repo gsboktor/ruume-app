@@ -86,7 +86,7 @@ export const NotificationToast = () => {
 
   const translateY = useSharedValue(-insets.top);
   const opacity = useSharedValue(0);
-  const height = useSharedValue(Dimensions.get('window').height * 0.125);
+  const height = useSharedValue(Dimensions.get('window').height / 10);
   const scale = useSharedValue(0.9);
 
   const setRef = useCallback((val: boolean) => {
@@ -138,7 +138,7 @@ export const NotificationToast = () => {
       onPanResponderRelease: () => {
         if (!openModeRef.current) {
           height.value = withSequence(
-            withTiming(Dimensions.get('window').height * 0.125, { duration: 125, easing: Easing.linear }, () => {
+            withTiming(Dimensions.get('window').height / 10, { duration: 125, easing: Easing.linear }, () => {
               scale.value = withTiming(0.9, { duration: 125, easing: Easing.elastic(1.1) });
             }),
           );
@@ -149,7 +149,7 @@ export const NotificationToast = () => {
         if (height.value >= 150 && !openModeRef.current) {
           handleOpenModeWithEffect();
         }
-        if (gestureState.dy > 85 && !openModeRef.current) {
+        if (gestureState.dy > 50 && !openModeRef.current) {
           if (height.value >= 150) {
             handleOpenModeWithEffect();
           } else {
@@ -158,7 +158,7 @@ export const NotificationToast = () => {
         }
 
         if (gestureState.dy < 0) {
-          height.value = withTiming(Dimensions.get('window').height * 0.125, { duration: 125, easing: Easing.linear });
+          height.value = withTiming(Dimensions.get('window').height / 10, { duration: 125, easing: Easing.linear });
           handleCloseAndCollapseEffect();
         }
       },

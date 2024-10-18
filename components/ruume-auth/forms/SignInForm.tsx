@@ -16,13 +16,19 @@ const FormGroupContainer = styled(View)`
   gap: 8px;
 `;
 
+const FormContainer = styled(View)`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
 export const SignInForm = () => {
   const theme = useContext(ThemeContext);
 
   const { control } = useFormContext();
 
   return (
-    <>
+    <FormContainer>
       <FormGroupContainer>
         <Controller
           control={control}
@@ -60,6 +66,6 @@ export const SignInForm = () => {
           )}
         />
       </FormGroupContainer>
-    </>
+    </FormContainer>
   );
 };

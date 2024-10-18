@@ -1,9 +1,2 @@
-import { atom } from 'jotai';
-
-export const notificationAtom = atom({
-  default: {
-    visible: false,
-    message: '',
-    messageContent: '',
-  },
-});
+export * from './formTypeAtom';
+export * from './notificationAtom';

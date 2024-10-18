@@ -1,17 +1,10 @@
-import React, { useContext } from 'react';
-import { FieldErrors, SubmitErrorHandler, SubmitHandler, useFormContext } from 'react-hook-form';
-import { Keyboard, KeyboardAvoidingView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { notificationAtom } from '@Ruume/store';
-import { RuumeSignUpSchema } from '@Ruume/utils/schema';
+import React from 'react';
+import { Dimensions, KeyboardAvoidingView, View } from 'react-native';
 
 import { BaseText, HapticPressable } from '../shared';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
-import { useRouter } from 'expo-router';
-import { useSetAtom } from 'jotai';
-import styled, { ThemeContext } from 'styled-components/native';
+import styled from 'styled-components/native';
 
 const ButtonGroupContainer = styled(KeyboardAvoidingView)`
   display: flex;
@@ -36,64 +29,26 @@ const ActiveButtonContainer = styled(View)`
   width: 100%;
 `;
 
-export default function RuumeAuthButtonGroup({
-  formType,
-  setFormType,
-}: {
-  formType: 'signUp' | 'signIn';
-  setFormType: (formType: 'signUp' | 'signIn') => void;
-}) {
-  const theme = useContext(ThemeContext);
-  const insets = useSafeAreaInsets();
-  const router = useRouter();
-  const setNotification = useSetAtom(notificationAtom);
+export type RuumeAuthButtonGroupProps = {
+  handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  isLoading?: boolean;
+  label: string;
+};
 
-  const { handleSubmit } = useFormContext<RuumeSignUpSchema>();
-
-  const composeErrorMessage = (errors: FieldErrors<RuumeSignUpSchema>) => {
-    return Object.values(errors)
-      .map((error) => error.message)
-      .join('\n');
-  };
-
-  const onSubmit: SubmitHandler<RuumeSignUpSchema> = (data) => {
-    console.log('Form submitted:', JSON.stringify(data));
-    Keyboard.dismiss();
-    router.replace('/(tabs)/ruume-home');
-  };
-
-  const onError: SubmitErrorHandler<RuumeSignUpSchema> = (errors) => {
-    console.log('Form errors:', JSON.stringify(errors));
-    setNotification({
-      default: {
-        visible: true,
-        message: 'Sign up problem',
-        messageContent: composeErrorMessage(errors),
-      },
-    });
-  };
-
-  const handleFormSubmit = handleSubmit(onSubmit, onError);
-
+export const RuumeAuthButtonGroup = ({ handleSubmit, isLoading, label }: RuumeAuthButtonGroupProps) => {
   return (
-    <ButtonGroupContainer behavior="padding" keyboardVerticalOffset={insets.top * 1.25}>
-      <HapticPressable
-        style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-        onPress={formType === 'signUp' ? () => setFormType('signIn') : handleFormSubmit}
-      >
-        <BaseText style={{ color: theme?.text, fontSize: 20 }}>Sign in</BaseText>
-      </HapticPressable>
+    <ButtonGroupContainer behavior="padding" keyboardVerticalOffset={Dimensions.get('window').height / 5.75}>
       <HapticPressable
         style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}
-        onPress={formType === 'signUp' ? handleFormSubmit : () => setFormType('signUp')}
+        onPress={handleSubmit}
         hapticWeight={ImpactFeedbackStyle.Heavy}
       >
         <ActiveButtonContainer>
           <BaseText type="stylized" style={{ fontSize: 32, height: 'auto' }}>
-            Sign Up
+            {isLoading ? 'Loading...' : label}
           </BaseText>
         </ActiveButtonContainer>
       </HapticPressable>
     </ButtonGroupContainer>
   );
-}
+};
