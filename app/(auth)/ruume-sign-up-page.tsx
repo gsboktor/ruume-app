@@ -7,6 +7,7 @@ import { SignUpForm } from '@Ruume/components/ruume-auth/forms';
 import { RuumeAuthButtonGroup } from '@Ruume/components/ruume-auth/RuumeAuthButtonGroup';
 import { useSignUpByPhone } from '@Ruume/hooks';
 import { notificationAtom } from '@Ruume/store';
+import { FormType } from '@Ruume/types/forms';
 import { composeErrorMessage } from '@Ruume/utils/formatters';
 import { RuumeSignUpSchema } from '@Ruume/utils/schema';
 
@@ -75,6 +76,7 @@ export default function RuumeSignUpPage() {
       <RuumeFormSwitcher
         primaryLabel="Already have an account?"
         secondaryLabel="Sign in"
+        formType={FormType.SIGN_IN}
         href="/(auth)/ruume-sign-in-page"
       />
       <RuumeAuthButtonGroup
