@@ -13,6 +13,9 @@ app-example/
 components-example/
 ios/
 android/
+.env
+.env.local
+.env.production
 
 # macOS
 .DS_Store

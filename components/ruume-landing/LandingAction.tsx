@@ -10,9 +10,12 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { BaseText, HapticPressable } from '@Ruume/components/shared';
+import { formTypeAtom } from '@Ruume/store';
+import { FormType } from '@Ruume/types/forms';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useRouter } from 'expo-router';
+import { useSetAtom } from 'jotai';
 import styled from 'styled-components/native';
 
 const LandingActionButton = styled(Animated.View)`
@@ -38,12 +41,14 @@ export const LandingAction = () => {
   const height = useSharedValue(100);
 
   const [contentVisible, setContentVisible] = useState(true);
+  const setFormType = useSetAtom(formTypeAtom);
 
   const routeWithDelay = useCallback(() => {
     setTimeout(() => {
-      router.replace('/(tabs)/ruume-home');
+      setFormType(FormType.SIGN_UP);
+      router.replace('/(auth)/ruume-sign-up-page');
     }, 250);
-  }, [router]);
+  }, [router, setFormType]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     width: width.value,

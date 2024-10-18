@@ -15,6 +15,7 @@ const StyledHomeContainer = styled(View)`
 
 export default function RuumeHome() {
   const theme = useContext(ThemeContext);
+
   return (
     <>
       <StyledHomeContainer>
