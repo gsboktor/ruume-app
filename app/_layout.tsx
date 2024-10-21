@@ -3,8 +3,9 @@ import { useColorScheme } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import { queryClient } from '@Ruume/clients/react-query';
-import { NotificationToast } from '@Ruume/components/shared/NotificationToast';
-import { appTheme, Colors } from '@Ruume/constants';
+import { NotificationToast } from '@Ruume/ui';
+import { Colors } from '@Ruume/ui/colors';
+import { appTheme } from '@Ruume/ui/theme';
 
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';

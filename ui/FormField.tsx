@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { TextInput, TextInputProps, View } from 'react-native';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { BaseText } from './BaseText';
 
+import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import styled, { useTheme } from 'styled-components/native';
 
 export type FormFieldProps = {
-  icon?: React.ReactNode;
+  Icon?: React.ElementType;
   validationMessage?: string;
   placeholder?: string;
   inputMode?: TextInputProps['inputMode'];
   onBlur?: () => void;
   onFocus?: () => void;
+  header?: string;
   style?: TextInputProps['style'];
   placeholderTextColor?: string;
 } & TextInputProps;
@@ -32,18 +35,28 @@ const FormFieldContainer = styled(View)`
   gap: 4px;
 `;
 
+const FormFieldHeader = styled(BaseText)`
+  font-size: 14px;
+  color: ${({ theme }) => theme?.text};
+  text-align: start;
+  padding-left: 16px;
+`;
+
 const FormInputWrapper = styled(LinearGradient)`
   display: flex;
+  flex-direction: row;
   flex: 3;
   border-radius: 20px;
+  gap: 8px;
   padding: 16px;
 `;
 
 export const FormField = ({
-  icon,
+  Icon,
   validationMessage,
   placeholder,
   inputMode = 'text',
+  header,
   onBlur,
   onFocus,
   style,
@@ -51,16 +64,44 @@ export const FormField = ({
   ...rest
 }: FormFieldProps) => {
   const theme = useTheme();
+
+  const [iconColor, setIconColor] = useState(theme?.textLightGray);
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const handleBlur = useCallback(() => {
+    scale.value = withTiming(1, { duration: 300, easing: Easing.elastic(1.2) });
+
+    setIconColor(theme?.textLightGray);
+    onBlur?.();
+  }, [theme?.textLightGray, scale, onBlur]);
+
+  const handleFocus = useCallback(() => {
+    Haptics.selectionAsync();
+    scale.value = withTiming(1.2, { duration: 400, easing: Easing.elastic(1.2) });
+
+    setIconColor(theme?.text);
+    onFocus?.();
+  }, [theme?.text, scale, onFocus]);
+
   return (
     <FormFieldContainer>
+      {header && <FormFieldHeader>{header}</FormFieldHeader>}
       <FormFieldMainContent>
-        {icon && icon}
         <FormInputWrapper colors={['#434343', '#303030']}>
+          {Icon && (
+            <Animated.View style={animatedStyle}>
+              <Icon width={24} height={24} fill={iconColor} />
+            </Animated.View>
+          )}
           <TextInput
             placeholder={placeholder}
             inputMode={inputMode}
-            onBlur={onBlur}
-            onFocus={onFocus}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
             style={style}
             placeholderTextColor={placeholderTextColor}
             {...rest}

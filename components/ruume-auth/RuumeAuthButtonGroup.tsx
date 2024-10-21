@@ -1,7 +1,7 @@
 import React from 'react';
-import { Dimensions, KeyboardAvoidingView, View } from 'react-native';
+import { KeyboardAvoidingView, View } from 'react-native';
 
-import { BaseText, HapticPressable } from '../shared';
+import { BaseText, HapticPressable } from '@Ruume/ui';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import styled from 'styled-components/native';
@@ -33,11 +33,12 @@ export type RuumeAuthButtonGroupProps = {
   handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
   isLoading?: boolean;
   label: string;
+  offset?: number;
 };
 
-export const RuumeAuthButtonGroup = ({ handleSubmit, isLoading, label }: RuumeAuthButtonGroupProps) => {
+export const RuumeAuthButtonGroup = ({ handleSubmit, isLoading, label, offset }: RuumeAuthButtonGroupProps) => {
   return (
-    <ButtonGroupContainer behavior="padding" keyboardVerticalOffset={Dimensions.get('window').height / 5.75}>
+    <ButtonGroupContainer behavior="padding" keyboardVerticalOffset={offset}>
       <HapticPressable
         style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}
         onPress={handleSubmit}

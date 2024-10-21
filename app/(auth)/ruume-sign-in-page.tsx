@@ -2,19 +2,19 @@ import React, { useEffect } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useFormContext } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 
+import InfoIcon from '@Ruume/assets/icons/info_circle.svg';
 import { RuumeAuthDisclaimer } from '@Ruume/components/ruume-auth';
-import { SignInForm } from '@Ruume/components/ruume-auth/forms';
 import { RuumeAuthButtonGroup } from '@Ruume/components/ruume-auth/RuumeAuthButtonGroup';
-import { RuumeFormSwitcher } from '@Ruume/components/ruume-auth/RuumeFormSwitcher';
+import { SignInForm } from '@Ruume/components/ruume-sign-in';
 import { useSignInByPhone } from '@Ruume/hooks';
 import { notificationAtom } from '@Ruume/store';
-import { FormType } from '@Ruume/types/forms';
 import { composeErrorMessage } from '@Ruume/utils/formatters';
 import { RuumeSignInSchema } from '@Ruume/utils/schema';
+import { vh } from '@Ruume/utils/viewport';
 
 import { router } from 'expo-router';
 import { useSetAtom } from 'jotai';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const AuthPageContainer = styled(View)`
   display: flex;
@@ -34,6 +34,7 @@ export default function RuumeSignInPage() {
 
   const setNotification = useSetAtom(notificationAtom);
   const { handleSubmit } = useFormContext<RuumeSignInSchema>();
+  const theme = useTheme();
 
   useEffect(() => {
     if (signInUserData?.session && signInUserData?.session?.user) {
@@ -62,7 +63,7 @@ export default function RuumeSignInPage() {
     setNotification({
       default: {
         visible: true,
-        message: 'Sign in problem',
+        message: 'Please check all fields',
         messageContent: composeErrorMessage(errors),
       },
     });
@@ -71,18 +72,18 @@ export default function RuumeSignInPage() {
   return (
     <AuthPageContainer>
       <SignInForm />
-      <RuumeFormSwitcher
-        primaryLabel="Don't have an account?"
-        secondaryLabel="Sign up"
-        formType={FormType.SIGN_UP}
-        href="/(auth)/ruume-sign-up-page"
-      />
       <RuumeAuthButtonGroup
         label={'Sign in'}
         handleSubmit={handleSubmit(onSubmit, onError)}
         isLoading={signInUserLoading}
+        offset={vh * 20}
       />
-      <RuumeAuthDisclaimer />
+      <RuumeAuthDisclaimer
+        primaryText="Signing up with a phone number will require a verification code."
+        actionLabel="Learn More"
+        onActionPress={() => {}}
+        leftIcon={<InfoIcon width={16} height={16} fill={theme?.textLightGray} />}
+      />
     </AuthPageContainer>
   );
 }

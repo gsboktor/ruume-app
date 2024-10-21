@@ -9,9 +9,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { BaseText, HapticPressable } from '@Ruume/components/shared';
 import { formTypeAtom } from '@Ruume/store';
 import { FormType } from '@Ruume/types/forms';
+import { BaseText, HapticPressable } from '@Ruume/ui';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import { useRouter } from 'expo-router';

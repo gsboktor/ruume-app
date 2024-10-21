@@ -2,18 +2,19 @@ import React, { useEffect } from 'react';
 import { SubmitErrorHandler, SubmitHandler, useFormContext } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 
-import { RuumeAuthDisclaimer, RuumeFormSwitcher } from '@Ruume/components/ruume-auth';
-import { SignUpForm } from '@Ruume/components/ruume-auth/forms';
+import InfoIcon from '@Ruume/assets/icons/info_circle.svg';
+import { RuumeAuthDisclaimer } from '@Ruume/components/ruume-auth';
 import { RuumeAuthButtonGroup } from '@Ruume/components/ruume-auth/RuumeAuthButtonGroup';
+import { SignUpForm } from '@Ruume/components/ruume-sign-up';
 import { useSignUpByPhone } from '@Ruume/hooks';
-import { notificationAtom } from '@Ruume/store';
-import { FormType } from '@Ruume/types/forms';
+import { notificationAtom, phoneNumberAtom } from '@Ruume/store';
 import { composeErrorMessage } from '@Ruume/utils/formatters';
 import { RuumeSignUpSchema } from '@Ruume/utils/schema';
+import { vh } from '@Ruume/utils/viewport';
 
 import { router } from 'expo-router';
 import { useSetAtom } from 'jotai';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
 const AuthPageContainer = styled(View)`
   display: flex;
@@ -30,12 +31,16 @@ export default function RuumeSignUpPage() {
     data: signUpUserResponse,
     error: signUpUserError,
   } = useSignUpByPhone();
+  const theme = useTheme();
+  const setPhoneNumber = useSetAtom(phoneNumberAtom);
 
   const setNotification = useSetAtom(notificationAtom);
   const { handleSubmit } = useFormContext<RuumeSignUpSchema>();
 
   useEffect(() => {
     if (signUpUserResponse?.user) {
+      console.log('signUpUserResponse', signUpUserResponse.user.phone);
+      setPhoneNumber(signUpUserResponse.user.phone ?? '');
       router.push('/(auth)/ruume-otp-page');
     }
 
@@ -48,7 +53,7 @@ export default function RuumeSignUpPage() {
         },
       });
     }
-  }, [setNotification, signUpUserError, signUpUserResponse?.user]);
+  }, [setNotification, setPhoneNumber, signUpUserError, signUpUserResponse?.user]);
 
   const onSubmit: SubmitHandler<RuumeSignUpSchema> = (data) => {
     console.log('Form submitted:', JSON.stringify(data));
@@ -64,7 +69,7 @@ export default function RuumeSignUpPage() {
     setNotification({
       default: {
         visible: true,
-        message: 'Sign up problem',
+        message: 'Please check all fields',
         messageContent: composeErrorMessage(errors),
       },
     });
@@ -73,18 +78,19 @@ export default function RuumeSignUpPage() {
   return (
     <AuthPageContainer>
       <SignUpForm />
-      <RuumeFormSwitcher
-        primaryLabel="Already have an account?"
-        secondaryLabel="Sign in"
-        formType={FormType.SIGN_IN}
-        href="/(auth)/ruume-sign-in-page"
-      />
       <RuumeAuthButtonGroup
         label={'Sign up'}
         handleSubmit={handleSubmit(onSubmit, onError)}
         isLoading={signUpUserLoading}
+        offset={vh * 17.5}
       />
-      <RuumeAuthDisclaimer />
+      <RuumeAuthDisclaimer
+        primaryText="Signing up with a phone number will require a verification code."
+        actionLabel="Learn More"
+        // TODO: Add action
+        onActionPress={() => {}}
+        leftIcon={<InfoIcon width={14} height={14} fill={theme?.textLightGray} />}
+      />
     </AuthPageContainer>
   );
 }

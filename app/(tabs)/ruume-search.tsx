@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { BaseText } from '@Ruume/components/shared';
+import { BaseText } from '@Ruume/ui';
 
 import styled from 'styled-components/native';
 
