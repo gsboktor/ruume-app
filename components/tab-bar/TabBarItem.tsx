@@ -8,7 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { HapticPressable } from '@Ruume/components/shared';
+import { HapticPressable } from '@Ruume/ui';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import styled from 'styled-components/native';

@@ -1,2 +1,2 @@
-export * from './formTypeAtom';
+export * from './auth';
 export * from './notificationAtom';

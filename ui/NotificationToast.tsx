@@ -105,8 +105,9 @@ export const NotificationToast = () => {
   }, [scale, setRef]);
 
   const handleCloseAndCollapseEffect = useCallback(() => {
+    setRef(false);
+    height.value = withTiming(Dimensions.get('window').height / 10, { duration: 125, easing: Easing.linear });
     scale.value = withSequence(
-      withTiming(0.7, { duration: 125, easing: Easing.elastic(1.1) }),
       withTiming(0.9, { duration: 125, easing: Easing.elastic(1.1) }, () => {
         translateY.value = withSpring(-insets.top, { damping: 15, stiffness: 200 });
         opacity.value = withTiming(0, { duration: 200 }, (finished) => {
@@ -123,7 +124,7 @@ export const NotificationToast = () => {
         });
       }),
     );
-  }, [insets.top, opacity, scale, setNotification, setRef, translateY]);
+  }, [height, insets.top, opacity, scale, setNotification, setRef, translateY]);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -158,7 +159,6 @@ export const NotificationToast = () => {
         }
 
         if (gestureState.dy < 0) {
-          height.value = withTiming(Dimensions.get('window').height / 10, { duration: 125, easing: Easing.linear });
           handleCloseAndCollapseEffect();
         }
       },
@@ -169,8 +169,14 @@ export const NotificationToast = () => {
     if (notification.default.visible) {
       translateY.value = withSpring(insets.top, { damping: 15, stiffness: 200 });
       opacity.value = withTiming(1, { duration: 300 });
+
+      const timeout = setTimeout(() => {
+        handleCloseAndCollapseEffect();
+      }, 5000);
+
+      return () => clearTimeout(timeout);
     }
-  }, [notification.default.visible, translateY, opacity, insets.top]);
+  }, [notification.default.visible, translateY, opacity, insets.top, handleCloseAndCollapseEffect]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],

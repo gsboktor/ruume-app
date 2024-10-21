@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import Settings from '@Ruume/assets/icons/settings.svg';
-import { BaseText } from '@Ruume/components/shared';
+import { BaseText } from '@Ruume/ui';
 
 import { StatusBar } from 'expo-status-bar';
 import styled, { ThemeContext } from 'styled-components/native';

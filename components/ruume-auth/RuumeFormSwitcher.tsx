@@ -3,8 +3,7 @@ import { View } from 'react-native';
 
 import { formTypeAtom } from '@Ruume/store';
 import { FormType } from '@Ruume/types/forms';
-
-import { BaseText } from '../shared';
+import { BaseText } from '@Ruume/ui';
 
 import * as Haptics from 'expo-haptics';
 import { Href, Link } from 'expo-router';
@@ -24,15 +23,14 @@ const FormSwitcherContainer = styled(View)`
 `;
 
 const FormSwitcherText = styled(BaseText)`
-  font-size: 16px;
+  font-size: 15px;
   color: ${({ theme }) => theme?.textLightGray};
 `;
 
 const FormSwitcherLink = styled(Link)`
-  font-size: 18px;
+  font-size: 12px;
   color: ${({ theme }) => theme?.text};
   text-decoration-line: underline;
-  margin-top: 4px;
 `;
 
 export const RuumeFormSwitcher = ({ primaryLabel, secondaryLabel, href, formType }: RuumeFormSwitcherProps) => {

@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Animated, View } from 'react-native';
+import { View } from 'react-native';
 
 import Key from '@Ruume/assets/icons/key.svg';
 import Phone from '@Ruume/assets/icons/phone.svg';
+import { FormType } from '@Ruume/types/forms';
+import { FormField } from '@Ruume/ui';
 import { phoneNumberFormatter } from '@Ruume/utils/formatters';
 
-import { FormField } from '../../shared';
+import { RuumeFormSwitcher } from '../ruume-auth/RuumeFormSwitcher';
 
 import styled, { ThemeContext } from 'styled-components';
 
@@ -16,13 +18,13 @@ const FormGroupContainer = styled(View)`
   gap: 8px;
 `;
 
-const FormContainer = styled(Animated.View)`
+const FormContainer = styled(View)`
   display: flex;
   flex-direction: column;
   gap: 16px;
 `;
 
-export const SignUpForm = () => {
+export const SignInForm = () => {
   const theme = useContext(ThemeContext);
 
   const { control } = useFormContext();
@@ -36,6 +38,7 @@ export const SignUpForm = () => {
           render={({ field: { value, onChange } }) => (
             <FormField
               placeholder="Phone Number"
+              header="Phone Number"
               placeholderTextColor={theme?.textLightGray}
               inputMode="tel"
               onChangeText={(text) => {
@@ -44,8 +47,8 @@ export const SignUpForm = () => {
               }}
               maxLength={10}
               value={value}
-              icon={<Phone width={24} height={24} fill="white" />}
-              style={{ fontSize: 18, color: theme?.text }}
+              Icon={Phone}
+              style={{ fontSize: 20, color: theme?.text, paddingRight: 8 }}
             />
           )}
         />
@@ -57,28 +60,20 @@ export const SignUpForm = () => {
           render={({ field: { value, onChange } }) => (
             <FormField
               placeholder="Password"
+              header="Password"
               placeholderTextColor={theme?.textLightGray}
               value={value}
-              style={{ fontSize: 18, color: theme?.text }}
-              icon={<Key width={24} height={24} fill="white" />}
+              style={{ fontSize: 20, color: theme?.text, paddingRight: 8 }}
+              Icon={Key}
               onChangeText={onChange}
             />
           )}
         />
-        <Controller
-          control={control}
-          name="passwordConfirmation"
-          render={({ field: { value, onChange } }) => (
-            <View style={{ marginLeft: 32 }}>
-              <FormField
-                placeholder="Re-enter Password"
-                placeholderTextColor={theme?.textLightGray}
-                value={value}
-                style={{ fontSize: 18, color: theme?.text }}
-                onChangeText={onChange}
-              />
-            </View>
-          )}
+        <RuumeFormSwitcher
+          primaryLabel="Don't have an account?"
+          secondaryLabel="Sign up"
+          formType={FormType.SIGN_UP}
+          href="/(auth)/ruume-sign-up-page"
         />
       </FormGroupContainer>
     </FormContainer>

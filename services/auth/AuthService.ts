@@ -1,5 +1,6 @@
 import { supabase } from '@Ruume/clients/supabase';
 import { IAuthService, SignInType, SignUpType } from '@Ruume/types/services';
+import { VerifyOTPType } from '@Ruume/types/services/VerifyOTP';
 
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -27,6 +28,14 @@ export class AuthService implements IAuthService {
     return await this.client.auth.signInWithPassword({
       phone: '+1' + signInPayload.phoneNumber.replace(/\D+/g, ''),
       password: signInPayload.password,
+    });
+  }
+
+  async verifyOTP(verifyOTPPayload: VerifyOTPType) {
+    return await this.client.auth.verifyOtp({
+      phone: verifyOTPPayload.phoneNumber,
+      token: verifyOTPPayload.code,
+      type: 'sms',
     });
   }
 }
