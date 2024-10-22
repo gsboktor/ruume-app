@@ -11,6 +11,10 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import { ThemeProvider } from 'styled-components/native';
 
+if (__DEV__) {
+  import('@Ruume/ReactotronConfig');
+}
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   return (

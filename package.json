@@ -10,7 +10,7 @@
     "start:dev:android": "bunx react-devtools & expo start --clear --android",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
-    "ios": "expo run:ios",
+    "ios": "expo run:ios & open ~/Desktop/reactotron.app",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "eslint .",
@@ -80,6 +80,7 @@
     "react-devtools": "^5.3.1",
     "react-native-svg-transformer": "^1.5.0",
     "react-test-renderer": "18.2.0",
+    "reactotron-react-native": "^5.1.9",
     "typescript": "~5.3.3"
   },
   "private": true

@@ -41,8 +41,10 @@ const RuumeOTPFooterContainer = styled(View)`
 
 export default function RuumeOTPPage() {
   const theme = useTheme();
+
   const digitRefs = useRefArray<TextInput>();
   const otpDigitsValue = useRefArray<string>();
+
   const setNotification = useSetAtom(notificationAtom);
   const signUpDetails = useAtomValue(signUpFormAtom);
 

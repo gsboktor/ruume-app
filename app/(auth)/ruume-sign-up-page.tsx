@@ -25,17 +25,35 @@ const AuthPageContainer = styled(View)`
 `;
 
 export default function RuumeSignUpPage() {
+  const theme = useTheme();
+
   const {
     mutate: signUpUser,
     isPending: signUpUserLoading,
     data: signUpUserResponse,
     error: signUpUserError,
   } = useSignUpByPhone();
-  const theme = useTheme();
-  const setPhoneNumber = useSetAtom(phoneNumberAtom);
 
+  const setPhoneNumber = useSetAtom(phoneNumberAtom);
   const setNotification = useSetAtom(notificationAtom);
+
   const { handleSubmit } = useFormContext<RuumeSignUpSchema>();
+
+  const onSubmit: SubmitHandler<RuumeSignUpSchema> = (data) => {
+    Keyboard.dismiss();
+    signUpUser(data);
+  };
+
+  const onError: SubmitErrorHandler<RuumeSignUpSchema> = (errors) => {
+    Keyboard.dismiss();
+    setNotification({
+      default: {
+        visible: true,
+        message: 'Please check all fields',
+        messageContent: composeErrorMessage(errors),
+      },
+    });
+  };
 
   useEffect(() => {
     if (signUpUserResponse?.user) {
@@ -54,26 +72,6 @@ export default function RuumeSignUpPage() {
       });
     }
   }, [setNotification, setPhoneNumber, signUpUserError, signUpUserResponse?.user]);
-
-  const onSubmit: SubmitHandler<RuumeSignUpSchema> = (data) => {
-    console.log('Form submitted:', JSON.stringify(data));
-
-    Keyboard.dismiss();
-    signUpUser(data);
-  };
-
-  const onError: SubmitErrorHandler<RuumeSignUpSchema> = (errors) => {
-    console.log('Form errors:', JSON.stringify(errors));
-
-    Keyboard.dismiss();
-    setNotification({
-      default: {
-        visible: true,
-        message: 'Please check all fields',
-        messageContent: composeErrorMessage(errors),
-      },
-    });
-  };
 
   return (
     <AuthPageContainer>
