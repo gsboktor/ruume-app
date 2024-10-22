@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { TextInput, TextInputProps, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
@@ -64,6 +64,7 @@ export const FormField = ({
   ...rest
 }: FormFieldProps) => {
   const theme = useTheme();
+  const inputRef = useRef<TextInput>(null);
 
   const [iconColor, setIconColor] = useState(theme?.textLightGray);
   const scale = useSharedValue(1);
@@ -91,7 +92,7 @@ export const FormField = ({
     <FormFieldContainer>
       {header && <FormFieldHeader>{header}</FormFieldHeader>}
       <FormFieldMainContent>
-        <FormInputWrapper colors={['#434343', '#303030']}>
+        <FormInputWrapper colors={['#434343', '#303030']} onTouchStart={() => inputRef.current?.focus()}>
           {Icon && (
             <Animated.View style={animatedStyle}>
               <Icon width={24} height={24} fill={iconColor} />
@@ -102,6 +103,7 @@ export const FormField = ({
             inputMode={inputMode}
             onBlur={handleBlur}
             onFocus={handleFocus}
+            ref={inputRef}
             style={style}
             placeholderTextColor={placeholderTextColor}
             {...rest}
