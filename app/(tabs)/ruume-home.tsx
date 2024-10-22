@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { View } from 'react-native';
 
 import Settings from '@Ruume/assets/icons/settings.svg';
+import { supabase } from '@Ruume/clients/supabase';
 import { BaseText } from '@Ruume/ui';
 
 import { StatusBar } from 'expo-status-bar';
@@ -15,6 +16,16 @@ const StyledHomeContainer = styled(View)`
 
 export default function RuumeHome() {
   const theme = useContext(ThemeContext);
+  const userId = useCallback(async () => {
+    const { data } = await supabase.auth.getSession();
+    return data.session;
+  }, []);
+
+  useEffect(() => {
+    userId().then((sess) => {
+      console.log(sess);
+    });
+  }, [userId]);
 
   return (
     <>

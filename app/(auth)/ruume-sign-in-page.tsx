@@ -25,6 +25,8 @@ const AuthPageContainer = styled(View)`
 `;
 
 export default function RuumeSignInPage() {
+  const theme = useTheme();
+
   const {
     mutate: signInUser,
     isPending: signInUserLoading,
@@ -33,8 +35,23 @@ export default function RuumeSignInPage() {
   } = useSignInByPhone();
 
   const setNotification = useSetAtom(notificationAtom);
+
   const { handleSubmit } = useFormContext<RuumeSignInSchema>();
-  const theme = useTheme();
+
+  const onSubmit: SubmitHandler<RuumeSignInSchema> = (data) => {
+    Keyboard.dismiss();
+    signInUser(data);
+  };
+
+  const onError: SubmitErrorHandler<RuumeSignInSchema> = (errors) => {
+    setNotification({
+      default: {
+        visible: true,
+        message: 'Please check all fields',
+        messageContent: composeErrorMessage(errors),
+      },
+    });
+  };
 
   useEffect(() => {
     if (signInUserData?.session && signInUserData?.session?.user) {
@@ -51,23 +68,6 @@ export default function RuumeSignInPage() {
       });
     }
   }, [setNotification, signInUserData?.session, signInUserError]);
-
-  const onSubmit: SubmitHandler<RuumeSignInSchema> = (data) => {
-    console.log('Form submitted:', JSON.stringify(data));
-    Keyboard.dismiss();
-    signInUser(data);
-  };
-
-  const onError: SubmitErrorHandler<RuumeSignInSchema> = (errors) => {
-    console.log('Form errors:', JSON.stringify(errors));
-    setNotification({
-      default: {
-        visible: true,
-        message: 'Please check all fields',
-        messageContent: composeErrorMessage(errors),
-      },
-    });
-  };
 
   return (
     <AuthPageContainer>
