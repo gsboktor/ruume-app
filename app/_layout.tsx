@@ -3,12 +3,14 @@ import { useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { queryClient } from '@Ruume/clients/react-query';
+import { persistSessionAtomEffect } from '@Ruume/store';
 import { NotificationToast } from '@Ruume/ui';
 import { Colors } from '@Ruume/ui/colors';
 import { appTheme } from '@Ruume/ui/theme';
 
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
+import { useAtomValue } from 'jotai';
 import { ThemeProvider } from 'styled-components/native';
 
 if (__DEV__) {
@@ -16,6 +18,8 @@ if (__DEV__) {
 }
 
 export default function RootLayout() {
+  useAtomValue(persistSessionAtomEffect);
+
   const colorScheme = useColorScheme();
   return (
     <QueryClientProvider client={queryClient}>
@@ -25,7 +29,6 @@ export default function RootLayout() {
           <Stack
             screenOptions={{
               headerShown: false,
-              animation: 'none',
               contentStyle: {
                 backgroundColor: Colors.black,
               },

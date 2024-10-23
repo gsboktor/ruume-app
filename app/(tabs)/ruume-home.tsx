@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect } from 'react';
-import { View } from 'react-native';
+import { Button, View } from 'react-native';
 
 import Settings from '@Ruume/assets/icons/settings.svg';
 import { supabase } from '@Ruume/clients/supabase';
@@ -27,6 +27,10 @@ export default function RuumeHome() {
     });
   }, [userId]);
 
+  const mockSignOut = useCallback(async () => {
+    await supabase.auth.signOut();
+  }, []);
+
   return (
     <>
       <StyledHomeContainer>
@@ -35,6 +39,7 @@ export default function RuumeHome() {
           Welcome to Ruume Home!
         </BaseText>
         <Settings width={24} height={24} fill="white" />
+        <Button title="Sign Out" onPress={mockSignOut} />
       </StyledHomeContainer>
     </>
   );
