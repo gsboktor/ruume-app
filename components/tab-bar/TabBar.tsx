@@ -10,8 +10,6 @@ import styled from 'styled-components/native';
 const BarContainer = styled(View)`
   position: relative;
   background-color: #000;
-  /* width: 100%;
-  height: 120px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,14 +19,14 @@ const StyledTabBarContainer = styled(Animated.View)`
   display: flex;
   flex-direction: row;
   position: absolute;
-  bottom: 40px;
+  bottom: 56px;
   align-items: center;
 `;
 
 export type TabBarProps = BottomTabBarProps;
 
 export default function TabBar({ state, descriptors, navigation }: TabBarProps) {
-  const yPosition = useSharedValue(100);
+  const yPosition = useSharedValue(150);
   useEffect(() => {
     yPosition.value = withSpring(0, { stiffness: 200, damping: 15, mass: 1 });
   }, [yPosition]);
