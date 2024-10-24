@@ -6,6 +6,7 @@ import {
   logCurrentStorage,
   unsubscribeMutationCache,
   viewMutationCache,
+  viewQueryCache,
 } from '@Ruume/utils/reactotron';
 
 Reactotron.setAsyncStorageHandler(AsyncStorage)
@@ -15,7 +16,11 @@ Reactotron.setAsyncStorageHandler(AsyncStorage)
       unsubscribeMutationCache();
     },
   })
-  .useReactNative()
+  .useReactNative({
+    networking: {
+      ignoreUrls: /symbolicate/,
+    },
+  })
   .connect();
 
 Reactotron.onCustomCommand({
@@ -37,4 +42,11 @@ Reactotron.onCustomCommand({
   command: 'viewMutationCache',
   description: 'Logs the current state of the mutation cache',
   handler: () => viewMutationCache(),
+});
+
+Reactotron.onCustomCommand({
+  title: 'View Query Cache',
+  command: 'viewQueryCache',
+  description: 'Logs the current state of the query cache',
+  handler: () => viewQueryCache(),
 });

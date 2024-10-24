@@ -1,23 +1,20 @@
-// eslint-disable-next-line simpleImportSort/imports
+import { queryClient } from '@Ruume/clients/react-query';
 import { supabase } from '@Ruume/clients/supabase';
 
-import { globalSessionAtom } from './globalSessionAtom';
-
+import { router } from 'expo-router';
 import { atomEffect } from 'jotai-effect';
-import { RESET } from 'jotai/utils';
 
-export const persistSessionAtomEffect = atomEffect((_, set) => {
-  console.log('usePersistSessionAtomEffect');
-  const unsubscribe = supabase.auth.onAuthStateChange((_event, session) => {
+export const persistSessionAtomEffect = atomEffect(() => {
+  const unsubscribe = supabase.auth.onAuthStateChange((_event) => {
+    queryClient.invalidateQueries({ queryKey: ['user-session'] });
     switch (_event) {
       case 'SIGNED_IN':
-        set(globalSessionAtom, session);
+        router.replace('/ruume-home');
         break;
       case 'SIGNED_OUT':
-        set(globalSessionAtom, RESET);
+        router.replace('/(auth)/ruume-sign-in-page');
         break;
       case 'TOKEN_REFRESHED':
-        set(globalSessionAtom, session);
         break;
     }
   });

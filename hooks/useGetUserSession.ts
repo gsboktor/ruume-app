@@ -1,10 +1,10 @@
 import { authService } from '@Ruume/services/auth';
 
-import { AuthError } from '@supabase/supabase-js';
+import { AuthError, Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetUserSession = () => {
-  return useQuery({
+  return useQuery<Session | null>({
     queryKey: ['user-session'],
     queryFn: async () => {
       try {

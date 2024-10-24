@@ -1,28 +1,24 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import Home from '@Ruume/assets/icons/home.svg';
 import Search from '@Ruume/assets/icons/search.svg';
 import Settings from '@Ruume/assets/icons/settings.svg';
 import { TabBar } from '@Ruume/components/tab-bar';
-import { formTypeAtom } from '@Ruume/store';
-import { isAuthenticatedAtom } from '@Ruume/store/auth';
-import { FormType } from '@Ruume/types/forms';
 
-import { router, Tabs } from 'expo-router';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { Tabs } from 'expo-router';
 import { ThemeContext } from 'styled-components/native';
 
 export default function TabLayout() {
   const theme = useContext(ThemeContext);
-  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
-  const setFormType = useSetAtom(formTypeAtom);
+  // const isAuthenticated = useAtomValue(isAuthenticatedAtom);
+  // const setFormType = useSetAtom(formTypeAtom);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setFormType(FormType.SIGN_IN);
-      router.replace('/(auth)/ruume-sign-in-page');
-    }
-  }, [isAuthenticated, setFormType]);
+  // useEffect(() => {
+  //   if (!isAuthenticated) {
+  //     setFormType(FormType.SIGN_IN);
+  //     router.replace('/(auth)/ruume-sign-in-page');
+  //   }
+  // }, [isAuthenticated, setFormType]);
 
   return (
     <Tabs

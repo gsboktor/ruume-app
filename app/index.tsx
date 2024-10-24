@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react';
 
 import { RuumeLanding } from '@Ruume/features';
-import { isAuthenticatedAtom } from '@Ruume/store/auth/isAuthenticatedAtom';
+import { useGetUserSession } from '@Ruume/hooks/useGetUserSession';
 
 import { router } from 'expo-router';
-import { useAtomValue } from 'jotai';
 
 export default function Index() {
-  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
-  console.log('isAuthenticated from entry at index', isAuthenticated);
+  const { data: session, isPending: isLoadingSession, error: sessionError } = useGetUserSession();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (session && !isLoadingSession && !sessionError) {
       router.replace('/ruume-home');
+      return;
     }
-  }, [isAuthenticated]);
+  }, [session, isLoadingSession, sessionError]);
 
   return <RuumeLanding />;
 }
