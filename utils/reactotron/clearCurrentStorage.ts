@@ -1,5 +1,10 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import Reactotron from 'reactotron-react-native';
+
+import { AppStorage, QueryStorage, SupabaseStorage } from '@Ruume/clients/mmkv';
 export function clearCurrentStorage() {
-  AsyncStorage.clear();
+  Reactotron.log('Clearing all storage');
+  AppStorage.clearAll();
+  QueryStorage.clearAll();
+  SupabaseStorage.clearAll();
 }

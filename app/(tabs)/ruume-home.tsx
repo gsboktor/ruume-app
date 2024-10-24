@@ -1,8 +1,10 @@
 import React, { useCallback, useContext, useEffect } from 'react';
-import { View } from 'react-native';
+import { Button, View } from 'react-native';
 
 import Settings from '@Ruume/assets/icons/settings.svg';
+import { queryClient } from '@Ruume/clients/react-query';
 import { supabase } from '@Ruume/clients/supabase';
+import { useGetUserSession } from '@Ruume/hooks/useGetUserSession';
 import { BaseText } from '@Ruume/ui';
 
 import { StatusBar } from 'expo-status-bar';
@@ -16,16 +18,20 @@ const StyledHomeContainer = styled(View)`
 
 export default function RuumeHome() {
   const theme = useContext(ThemeContext);
-  const userId = useCallback(async () => {
-    const { data } = await supabase.auth.getSession();
-    return data.session;
-  }, []);
+  const { data: session } = useGetUserSession();
 
   useEffect(() => {
-    userId().then((sess) => {
-      console.log(sess);
-    });
-  }, [userId]);
+    const query = queryClient.getQueryData(['user-session']);
+    console.log('QUERY', JSON.stringify(query));
+
+    if (session) {
+      console.log('SESSION', JSON.stringify(session));
+    }
+  }, [session]);
+
+  const mockSignOut = useCallback(async () => {
+    await supabase.auth.signOut();
+  }, []);
 
   return (
     <>
@@ -35,6 +41,7 @@ export default function RuumeHome() {
           Welcome to Ruume Home!
         </BaseText>
         <Settings width={24} height={24} fill="white" />
+        <Button title="Sign Out" onPress={mockSignOut} />
       </StyledHomeContainer>
     </>
   );

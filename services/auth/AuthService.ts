@@ -38,6 +38,15 @@ export class AuthService implements IAuthService {
       type: 'sms',
     });
   }
+
+  async getUserSession() {
+    const { data, error } = await this.client.auth.getSession();
+    if (error) {
+      console.error('Error getting user session', error);
+      throw error;
+    }
+    return data.session;
+  }
 }
 
 export const authService = new AuthService(supabase);

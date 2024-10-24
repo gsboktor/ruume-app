@@ -57,7 +57,6 @@ export default function RuumeSignUpPage() {
 
   useEffect(() => {
     if (signUpUserResponse?.user) {
-      console.log('signUpUserResponse', signUpUserResponse.user.phone);
       setPhoneNumber(signUpUserResponse.user.phone ?? '');
       router.push('/(auth)/ruume-otp-page');
     }
