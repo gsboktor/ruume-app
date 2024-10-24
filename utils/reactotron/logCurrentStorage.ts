@@ -1,23 +1,36 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import Reactotron from 'reactotron-react-native';
+
+import { AppStorage, QueryStorage, SupabaseStorage } from '@Ruume/clients/mmkv';
 
 export function logCurrentStorage() {
-  const tryParse = (value: string) => {
+  const tryParse = (value?: string) => {
     try {
-      return JSON.parse(value);
+      return JSON.parse(value ?? '{}');
     } catch (e) {
-      console.log('Error parsing value: ', e);
+      Reactotron.log('Error parsing value: ', e);
       return value;
     }
   };
-  
-  AsyncStorage.getAllKeys().then((keyArray) => {
-    AsyncStorage.multiGet(keyArray).then((keyValArray) => {
-      const storageItems: Record<string, unknown> = {};
-      for (const keyVal of keyValArray) {
-        storageItems[keyVal[0]] = tryParse(keyVal[1] ?? '{}');
-      }
-  
-      console.log('CURRENT STORAGE: \n', storageItems);
-    });
+
+  AppStorage.getAllKeys().forEach((key) => {
+    const value = AppStorage.getString(key);
+    Reactotron.log(key, tryParse(value));
   });
+  Reactotron.log('APP-STORAGE');
+
+
+  QueryStorage.getAllKeys().forEach((key) => {
+    const value = QueryStorage.getString(key);
+    Reactotron.log(key, tryParse(value));
+  });
+  Reactotron.log('QUERY-STORAGE');
+
+
+  SupabaseStorage.getAllKeys().forEach((key) => {
+    const value = SupabaseStorage.getString(key);
+    Reactotron.log(key, tryParse(value));
+  });
+  Reactotron.log('SUPABASE-STORAGE');
+
 }

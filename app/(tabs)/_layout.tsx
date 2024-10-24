@@ -10,15 +10,6 @@ import { ThemeContext } from 'styled-components/native';
 
 export default function TabLayout() {
   const theme = useContext(ThemeContext);
-  // const isAuthenticated = useAtomValue(isAuthenticatedAtom);
-  // const setFormType = useSetAtom(formTypeAtom);
-
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     setFormType(FormType.SIGN_IN);
-  //     router.replace('/(auth)/ruume-sign-in-page');
-  //   }
-  // }, [isAuthenticated, setFormType]);
 
   return (
     <Tabs

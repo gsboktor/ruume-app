@@ -1,6 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { ReactotronReactNative } from 'reactotron-react-native';
 import Reactotron from 'reactotron-react-native';
+import mmkvPlugin from 'reactotron-react-native-mmkv';
 
+import { AppStorage, QueryStorage, SupabaseStorage } from '@Ruume/clients/mmkv';
 import {
   clearCurrentStorage,
   logCurrentStorage,
@@ -9,31 +11,33 @@ import {
   viewQueryCache,
 } from '@Ruume/utils/reactotron';
 
-Reactotron.setAsyncStorageHandler(AsyncStorage)
-  .configure({
-    name: 'Ruume',
-    onDisconnect: () => {
-      unsubscribeMutationCache();
-    },
-  })
+Reactotron.configure({
+  name: 'Ruume',
+  onDisconnect: () => {
+    unsubscribeMutationCache();
+  },
+})
   .useReactNative({
     networking: {
       ignoreUrls: /symbolicate/,
     },
   })
+  .use(mmkvPlugin<ReactotronReactNative>({ storage: QueryStorage }))
+  .use(mmkvPlugin<ReactotronReactNative>({ storage: AppStorage }))
+  .use(mmkvPlugin<ReactotronReactNative>({ storage: SupabaseStorage }))
   .connect();
 
 Reactotron.onCustomCommand({
   title: 'Log Current Storage',
   command: 'logCurrentStorage',
-  description: 'Logs the current state of AsyncStorage',
+  description: 'Logs the current state of all MMKV storage objects',
   handler: () => logCurrentStorage(),
 });
 
 Reactotron.onCustomCommand({
   title: 'Clear Storage',
   command: 'clearStorage',
-  description: 'Clears the AsyncStorage',
+  description: 'Clears all MMKV storage objects',
   handler: () => clearCurrentStorage(),
 });
 

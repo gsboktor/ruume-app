@@ -2,18 +2,26 @@ import React, { useEffect } from 'react';
 
 import { RuumeLanding } from '@Ruume/features';
 import { useGetUserSession } from '@Ruume/hooks/useGetUserSession';
+import { BaseText } from '@Ruume/ui';
 
 import { router } from 'expo-router';
 
+//TODO: Load Fonts and Create Splash Screen
+
 export default function Index() {
-  const { data: session, isPending: isLoadingSession, error: sessionError } = useGetUserSession();
+  const { isPending, data: session, error } = useGetUserSession();
 
   useEffect(() => {
-    if (session && !isLoadingSession && !sessionError) {
+    if (!isPending && session?.user?.role === 'authenticated') {
       router.replace('/ruume-home');
       return;
     }
-  }, [session, isLoadingSession, sessionError]);
+  }, [isPending, session?.user?.role, error]);
+
+  if (isPending) {
+    //TODO: Splash Screen Here
+    return <BaseText>Loading...</BaseText>;
+  }
 
   return <RuumeLanding />;
 }
