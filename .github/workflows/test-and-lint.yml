@@ -18,14 +18,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: npm
+          cache: yarn
       - name: Install dependencies
         run: |
-          npm install
+          yarn install
       - name: Lint and format
         run: |
-          npm run lint
-          npm run format
+          yarn lint
+          yarn format
       - name: Test
         run: |
-          npm run test
+          yarn test
