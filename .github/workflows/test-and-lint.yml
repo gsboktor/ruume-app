@@ -1,0 +1,22 @@
+name: Test and lint
+
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: expo/expo-github-action@v1
+        with:
+          expo-version: 5.x
+      - run: |
+          npm install
+          npm run lint
+          npm run format
+          npm run test
