@@ -9,7 +9,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { formTypeAtom } from '@Ruume/store';
+import { formTypeAtom } from '@Ruume/store/auth';
 import { FormType } from '@Ruume/types/forms';
 import { BaseText, HapticPressable } from '@Ruume/ui';
 
@@ -46,7 +46,7 @@ export const LandingAction = () => {
   const routeWithDelay = useCallback(() => {
     setTimeout(() => {
       setFormType(FormType.SIGN_UP);
-      router.replace('/(auth)/ruume-sign-up-page');
+      router.push('/(auth)/ruume-sign-up-page');
     }, 250);
   }, [router, setFormType]);
 

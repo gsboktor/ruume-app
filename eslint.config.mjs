@@ -77,7 +77,13 @@ export default [
       'simpleImportSort/imports': [
         'error',
         {
-          groups: [['^react', 'react-native'], ['^(@Ruume)'], ['^\\.\\./'], ['^\\./']],
+          groups: [
+            ['^react', 'react-native'],
+            ['^(@Ruume)'],
+            ['@testing-library'],
+            ['^\\.\\./'],
+            ['^\\./'],
+          ],
         },
       ],
       indent: ['error', 2, { SwitchCase: 1 }],

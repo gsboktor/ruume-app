@@ -37,6 +37,7 @@ export const SignInForm = () => {
           name="phoneNumber"
           render={({ field: { value, onChange } }) => (
             <FormField
+              testID="phone-number-input"
               placeholder="Phone Number"
               header="Phone Number"
               placeholderTextColor={theme?.textLightGray}
@@ -59,6 +60,7 @@ export const SignInForm = () => {
           name="password"
           render={({ field: { value, onChange } }) => (
             <FormField
+              testID="password-input"
               placeholder="Password"
               header="Password"
               placeholderTextColor={theme?.textLightGray}

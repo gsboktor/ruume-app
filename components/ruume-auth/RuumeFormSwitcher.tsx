@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { formTypeAtom } from '@Ruume/store';
+import { formTypeAtom } from '@Ruume/store/auth';
 import { FormType } from '@Ruume/types/forms';
 import { BaseText } from '@Ruume/ui';
 

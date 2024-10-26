@@ -12,9 +12,8 @@ import { composeErrorMessage } from '@Ruume/utils/formatters';
 import { RuumeSignInSchema } from '@Ruume/utils/schema';
 import { vh } from '@Ruume/utils/viewport';
 
-import { router } from 'expo-router';
 import { useSetAtom } from 'jotai';
-import styled, { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components/native';
 
 const AuthPageContainer = styled(View)`
   display: flex;
@@ -27,12 +26,7 @@ const AuthPageContainer = styled(View)`
 export default function RuumeSignInPage() {
   const theme = useTheme();
 
-  const {
-    mutate: signInUser,
-    isPending: signInUserLoading,
-    error: signInUserError,
-    data: signInUserData,
-  } = useSignInByPhone();
+  const { mutate: signInUser, isPending: signInUserLoading, error: signInUserError } = useSignInByPhone();
 
   const setNotification = useSetAtom(notificationAtom);
 
@@ -54,10 +48,6 @@ export default function RuumeSignInPage() {
   };
 
   useEffect(() => {
-    if (signInUserData?.session && signInUserData?.session?.user) {
-      router.replace('/(tabs)/ruume-home');
-    }
-
     if (signInUserError) {
       setNotification({
         default: {
@@ -67,7 +57,7 @@ export default function RuumeSignInPage() {
         },
       });
     }
-  }, [setNotification, signInUserData?.session, signInUserError]);
+  }, [setNotification, signInUserError]);
 
   return (
     <AuthPageContainer>

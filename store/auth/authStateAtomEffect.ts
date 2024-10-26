@@ -9,10 +9,10 @@ import { atomEffect } from 'jotai-effect';
 
 export const authStateAtomEffect = atomEffect((_, set) => {
   const unsubscribe = supabase.auth.onAuthStateChange((_event) => {
-    queryClient.invalidateQueries({ queryKey: ['user-session'] });
+    queryClient.invalidateQueries({ queryKey: ['session'] });
     switch (_event) {
       case 'SIGNED_IN':
-        router.replace('/ruume-home');
+        router.replace('/');
         break;
       case 'SIGNED_OUT':
         set(formTypeAtom, FormType.SIGN_IN);

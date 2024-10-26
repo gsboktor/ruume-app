@@ -37,6 +37,7 @@ export const SignUpForm = () => {
           name="phoneNumber"
           render={({ field: { value, onChange } }) => (
             <FormField
+              testID="phone-number-input"
               header="Phone Number"
               placeholder="Phone Number"
               placeholderTextColor={theme?.textLightGray}
@@ -59,6 +60,7 @@ export const SignUpForm = () => {
           name="password"
           render={({ field: { value, onChange } }) => (
             <FormField
+              testID="password-input"
               header="Password"
               placeholder="Password"
               placeholderTextColor={theme?.textLightGray}
@@ -74,6 +76,7 @@ export const SignUpForm = () => {
           name="passwordConfirmation"
           render={({ field: { value, onChange } }) => (
             <FormField
+              testID="password-confirmation-input"
               header="Confirm Password"
               placeholder="Re-enter Password"
               placeholderTextColor={theme?.textLightGray}

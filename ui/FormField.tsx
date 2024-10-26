@@ -18,6 +18,7 @@ export type FormFieldProps = {
   header?: string;
   style?: TextInputProps['style'];
   placeholderTextColor?: string;
+  testID?: string;
 } & TextInputProps;
 
 const FormFieldMainContent = styled(View)`
@@ -52,6 +53,7 @@ const FormInputWrapper = styled(LinearGradient)`
 `;
 
 export const FormField = ({
+  testID: id,
   Icon,
   validationMessage,
   placeholder,
@@ -94,11 +96,12 @@ export const FormField = ({
       <FormFieldMainContent>
         <FormInputWrapper colors={['#434343', '#303030']} onTouchStart={() => inputRef.current?.focus()}>
           {Icon && (
-            <Animated.View style={animatedStyle}>
+            <Animated.View testID="form-field-icon" style={animatedStyle}>
               <Icon width={24} height={24} fill={iconColor} />
             </Animated.View>
           )}
           <TextInput
+            testID={id}
             placeholder={placeholder}
             inputMode={inputMode}
             onBlur={handleBlur}
