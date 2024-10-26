@@ -7,7 +7,7 @@ import { useGetSession } from '@Ruume/hooks/useGetSession';
 import { useFonts } from 'expo-font';
 import { Redirect } from 'expo-router';
 
-//TODO: Load Fonts and Create Splash Screen
+//TODO: Create Splash Screen
 
 export default function Index() {
   const { data: session } = useGetSession();
