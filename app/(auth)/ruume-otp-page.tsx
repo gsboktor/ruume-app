@@ -5,7 +5,8 @@ import { RuumeAuthButtonGroup, RuumeAuthDisclaimer } from '@Ruume/components/ruu
 import { RuumeOTPField } from '@Ruume/components/ruume-otp';
 import { useRefArray } from '@Ruume/hooks';
 import { useVerifyOTP } from '@Ruume/hooks/useVerifyOTP';
-import { notificationAtom, signUpFormAtom } from '@Ruume/store';
+import { notificationAtom } from '@Ruume/store';
+import { signUpFormAtom } from '@Ruume/store/auth';
 import { BaseText } from '@Ruume/ui';
 import { vh, vw } from '@Ruume/utils/viewport';
 
@@ -48,7 +49,7 @@ export default function RuumeOTPPage() {
   const setNotification = useSetAtom(notificationAtom);
   const signUpDetails = useAtomValue(signUpFormAtom);
 
-  const { mutate: verifyOTP, isPending: verifyOTPLoading, error: verifyOTPError, data: verifyOTPData } = useVerifyOTP();
+  const { mutate: verifyOTP, isPending: verifyOTPLoading, error: verifyOTPError } = useVerifyOTP();
 
   const handleSubmit = useCallback(async () => {
     const phoneNumber = signUpDetails.phoneNumber;
@@ -80,10 +81,6 @@ export default function RuumeOTPPage() {
   }, [otpDigitsValue, setNotification, signUpDetails.phoneNumber, verifyOTP]);
 
   useEffect(() => {
-    if (verifyOTPData?.session && verifyOTPData?.session?.user) {
-      router.replace('/(tabs)/ruume-home');
-    }
-
     if (verifyOTPError) {
       setNotification({
         default: {
@@ -93,7 +90,7 @@ export default function RuumeOTPPage() {
         },
       });
     }
-  }, [setNotification, verifyOTPData, verifyOTPError]);
+  }, [setNotification, verifyOTPError]);
 
   return (
     <RuumeOTPPageContainer keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>

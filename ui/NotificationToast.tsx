@@ -193,7 +193,7 @@ export const NotificationToast = () => {
   }
 
   return (
-    <NotificationToastContainer style={animatedStyle}>
+    <NotificationToastContainer style={animatedStyle} testID={'notification-toast'}>
       <Toast style={toastContentStyle} {...panResponder.current.panHandlers}>
         <ToastContent ref={contentRef}>
           <ToastContentHeader>

@@ -46,7 +46,7 @@ const StyledBlackCircle = styled(Animated.View)`
   width: 80px;
   height: 80px;
   border-radius: 50px;
-  background-color: #000;
+  background-color: ${({ theme }) => theme?.background};
   align-items: center;
   justify-content: center;
 `;

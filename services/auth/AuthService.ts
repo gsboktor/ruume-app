@@ -39,10 +39,19 @@ export class AuthService implements IAuthService {
     });
   }
 
-  async getUserSession() {
+  async getUser() {
+    const { data, error } = await this.client.auth.getUser();
+    if (error) {
+      console.error('Error getting user', error);
+      throw error;
+    }
+    return data.user;
+  }
+
+  async getSession() {
     const { data, error } = await this.client.auth.getSession();
     if (error) {
-      console.error('Error getting user session', error);
+      console.error('Error getting session', error);
       throw error;
     }
     return data.session;

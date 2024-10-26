@@ -1,40 +1,34 @@
-import React, { useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-require-imports */
+import React from 'react';
 
-import { RuumeLanding } from '@Ruume/features';
-import { useGetUserSession } from '@Ruume/hooks/useGetUserSession';
-import { notificationAtom } from '@Ruume/store';
-import { BaseText } from '@Ruume/ui';
+import { PageLoader } from '@Ruume/components/loaders';
+import { useGetSession } from '@Ruume/hooks/useGetSession';
 
-import { router } from 'expo-router';
-import { useSetAtom } from 'jotai';
+import { useFonts } from 'expo-font';
+import { Redirect } from 'expo-router';
 
 //TODO: Load Fonts and Create Splash Screen
 
 export default function Index() {
-  const setNotification = useSetAtom(notificationAtom);
-  const { isPending, data: session, error } = useGetUserSession();
+  const { data: session } = useGetSession();
 
-  useEffect(() => {
-    if (error) {
-      setNotification({
-        default: {
-          visible: true,
-          message: 'We could not log you in',
-          messageContent: 'Try logging in again. If the issue persists, please contact us at support@ruume.com.',
-        },
-      });
-      router.replace('/ruume-sign-in-page');
-    }
+  const [loaded] = useFonts({
+    SpaceMono: require('@Ruume/assets/fonts/SpaceMono-Regular.ttf'),
+    Gabarito: require('@Ruume/assets/fonts/Gabarito/Gabarito-Regular.ttf'),
+    GabaritoBold: require('@Ruume/assets/fonts/Gabarito/Gabarito-Bold.ttf'),
+    GabaritoMedium: require('@Ruume/assets/fonts/Gabarito/Gabarito-Medium.ttf'),
+    GabaritoSemiBold: require('@Ruume/assets/fonts/Gabarito/Gabarito-SemiBold.ttf'),
+    GabaritoExtraBold: require('@Ruume/assets/fonts/Gabarito/Gabarito-ExtraBold.ttf'),
+    GrandHotel: require('@Ruume/assets/fonts/GrandHotel/GrandHotel-Regular.ttf'),
+  });
 
-    if (!isPending && session?.user?.role === 'authenticated') {
-      router.replace('/ruume-home');
-    }
-  }, [isPending, session?.user?.role, error, setNotification]);
-
-  if (isPending) {
-    //TODO: Splash Screen Here
-    return <BaseText>Loading...</BaseText>;
+  if (!loaded) {
+    return <PageLoader />;
   }
 
-  return <RuumeLanding />;
+  return session?.user?.role === 'authenticated' ? (
+    <Redirect href="/ruume-home" />
+  ) : (
+    <Redirect href="/ruume-landing-page" />
+  );
 }

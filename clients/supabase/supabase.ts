@@ -2,7 +2,6 @@
 import 'react-native-url-polyfill/auto';
 
 import { createClient, SupportedStorage } from '@supabase/supabase-js';
-import { AppState } from 'react-native';
 import { SupabaseStorage } from '../mmkv';
 
 const mmkvSupabaseSupportedStorage = {
@@ -23,11 +22,3 @@ export const supabase = createClient(
     },
   },
 );
-
-AppState.addEventListener('change', (state) => {
-  if (state === 'active') {
-    supabase.auth.startAutoRefresh();
-  } else {
-    supabase.auth.stopAutoRefresh();
-  }
-});

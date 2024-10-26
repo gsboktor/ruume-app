@@ -4,6 +4,7 @@ import mmkvPlugin from 'reactotron-react-native-mmkv';
 
 import { AppStorage, QueryStorage, SupabaseStorage } from '@Ruume/clients/mmkv';
 import {
+  clearAllCachedQueries,
   clearCurrentStorage,
   logCurrentStorage,
   unsubscribeMutationCache,
@@ -53,4 +54,11 @@ Reactotron.onCustomCommand({
   command: 'viewQueryCache',
   description: 'Logs the current state of the query cache',
   handler: () => viewQueryCache(),
+});
+
+Reactotron.onCustomCommand({
+  title: 'Clear All Cached Queries',
+  command: 'clearAllCachedQueries',
+  description: 'Clears all cached queries',
+  handler: () => clearAllCachedQueries(),
 });

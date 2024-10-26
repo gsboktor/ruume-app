@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import RuumeAuthHeader from '@Ruume/components/ruume-auth/RuumeAuthHeader';
 import { useAuthFormByType } from '@Ruume/hooks';
-import { formTypeAtom } from '@Ruume/store';
+import { formTypeAtom } from '@Ruume/store/auth';
 
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -19,7 +19,7 @@ export default function AuthLayout() {
       <FormProvider {...methods}>
         <StatusBar style="light" />
         <RuumeAuthHeader />
-        <Stack screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+        <Stack screenOptions={{ headerShown: false, animation: 'simple_push' }}>
           <Stack.Screen name="ruume-sign-up-page" />
           <Stack.Screen name="ruume-sign-in-page" />
           <Stack.Screen name="ruume-otp-page" />

@@ -5,7 +5,7 @@ import { mutationCache } from '@Ruume/clients/react-query';
 import { MutationCacheNotifyEvent } from '@tanstack/react-query';
 
 const cacheCallback = (event: MutationCacheNotifyEvent) => {
-  Reactotron.log('IN CACHE CALLBACK', event);
+  Reactotron.log('IN MUTATION CALLBACK\n', event);
 };
 
 const unsubscribeMutationCache = mutationCache.subscribe(cacheCallback);
