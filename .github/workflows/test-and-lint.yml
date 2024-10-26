@@ -9,23 +9,24 @@ on:
       - main
 
 jobs:
-  test:
+  Test-format-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Setup Node
         uses: actions/setup-node@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: 20.x
-          cache: yarn
+          cache: bun
       - name: Install dependencies
         run: |
-          yarn install
+          bun install
       - name: Lint and format
         run: |
-          yarn lint
-          yarn format
+          bun lint
+          bun format
       - name: Test
         run: |
-          yarn test
+          bun run test
