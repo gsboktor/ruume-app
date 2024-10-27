@@ -26,5 +26,5 @@ export const renderWithProviders = (
   {
     initialAtomValues = [],
     ...renderOptions
-  }: Partial<RenderOptions & { initialAtomValues?: Array<[any, any]> }>,
-) => render(<TestWrapper initialAtomValues={initialAtomValues}>{component}</TestWrapper>, renderOptions);
+  }: Partial<Omit<RenderOptions, 'wrapper'> & { initialAtomValues?: Array<[any, any]> }>,
+) => render(component, { wrapper: ({ children }) => <TestWrapper initialAtomValues={initialAtomValues}>{children}</TestWrapper>, ...renderOptions });

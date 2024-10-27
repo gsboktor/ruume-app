@@ -39,6 +39,7 @@ const Toast = styled(Animated.View)`
   width: ${Dimensions.get('window').width * 0.95}px;
   align-items: center;
   justify-content: start;
+  min-height: 82px;
   opacity: 0.95;
 `;
 
@@ -86,7 +87,7 @@ export const NotificationToast = () => {
 
   const translateY = useSharedValue(-insets.top);
   const opacity = useSharedValue(0);
-  const height = useSharedValue(Dimensions.get('window').height / 10);
+  const height = useSharedValue(0);
   const scale = useSharedValue(0.9);
 
   const setRef = useCallback((val: boolean) => {
