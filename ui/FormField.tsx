@@ -94,7 +94,13 @@ export const FormField = ({
     <FormFieldContainer>
       {header && <FormFieldHeader>{header}</FormFieldHeader>}
       <FormFieldMainContent>
-        <FormInputWrapper colors={['#434343', '#303030']} onTouchStart={() => inputRef.current?.focus()}>
+        <FormInputWrapper
+          colors={['#434343', '#303030']}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            inputRef.current?.focus();
+          }}
+        >
           {Icon && (
             <Animated.View testID="form-field-icon" style={animatedStyle}>
               <Icon width={24} height={24} fill={iconColor} />

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Animated, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import Key from '@Ruume/assets/icons/key.svg';
 import Phone from '@Ruume/assets/icons/phone.svg';
@@ -18,10 +18,9 @@ const FormGroupContainer = styled(View)`
   gap: 8px;
 `;
 
-const FormContainer = styled(Animated.View)`
+const FormContainer = styled(ScrollView)`
   display: flex;
   flex-direction: column;
-  gap: 36px;
 `;
 
 export const SignUpForm = () => {
@@ -30,7 +29,7 @@ export const SignUpForm = () => {
   const { control } = useFormContext();
 
   return (
-    <FormContainer>
+    <FormContainer keyboardShouldPersistTaps="always" keyboardDismissMode="on-drag" contentContainerStyle={{ gap: 36 }}>
       <FormGroupContainer>
         <Controller
           control={control}

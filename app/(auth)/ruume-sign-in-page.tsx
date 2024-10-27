@@ -66,7 +66,7 @@ export default function RuumeSignInPage() {
         label={'Sign in'}
         handleSubmit={handleSubmit(onSubmit, onError)}
         isLoading={signInUserLoading}
-        offset={vh * 20}
+        offset={vh * 17.5}
       />
       <RuumeAuthDisclaimer
         primaryText="Signing up with a phone number will require a verification code."
