@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { TextInput, TextInputProps, View } from 'react-native';
+import { Pressable, TextInput, TextInputProps, View } from 'react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { BaseText } from './BaseText';
@@ -21,7 +21,7 @@ export type FormFieldProps = {
   testID?: string;
 } & TextInputProps;
 
-const FormFieldMainContent = styled(View)`
+const FormFieldMainContent = styled(Pressable)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -93,14 +93,8 @@ export const FormField = ({
   return (
     <FormFieldContainer>
       {header && <FormFieldHeader>{header}</FormFieldHeader>}
-      <FormFieldMainContent>
-        <FormInputWrapper
-          colors={['#434343', '#303030']}
-          onTouchStart={(e) => {
-            e.preventDefault();
-            inputRef.current?.focus();
-          }}
-        >
+      <FormFieldMainContent onPress={() => inputRef.current?.focus()}>
+        <FormInputWrapper colors={['#434343', '#303030']}>
           {Icon && (
             <Animated.View testID="form-field-icon" style={animatedStyle}>
               <Icon width={24} height={24} fill={iconColor} />
