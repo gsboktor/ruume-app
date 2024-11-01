@@ -61,7 +61,7 @@ export const FormField = ({
   header,
   onBlur,
   onFocus,
-  style,
+  style: textStyle,
   placeholderTextColor,
   ...rest
 }: FormFieldProps) => {
@@ -107,7 +107,7 @@ export const FormField = ({
             onBlur={handleBlur}
             onFocus={handleFocus}
             ref={inputRef}
-            style={style}
+            style={textStyle}
             placeholderTextColor={placeholderTextColor}
             {...rest}
           />

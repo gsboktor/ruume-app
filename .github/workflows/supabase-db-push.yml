@@ -1,3 +1,5 @@
+# TODO: Check the target branch (develop or main, and set the enviornment secrets accordingly)
+# Example: `${{github.ref_name == 'main' ? secrets.SUPABASE_PROJECT_REF_ID : secrets.PRD_SUPABASE_PROJECT_REF_ID}}`
 name: Supabase-CI
 
 on:
