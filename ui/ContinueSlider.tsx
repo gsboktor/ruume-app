@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
+  FadeOut,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
@@ -13,8 +14,10 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import ArrowRight from '@Ruume/assets/icons/arrow_right.svg';
+import { LoaderIndicatorSizes } from '@Ruume/types/ui';
 
 import { BaseText } from './BaseText';
+import { LoadingIndicator } from './LoadingIndicator';
 
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -47,7 +50,7 @@ const SlideButton = styled(Animated.View)`
   height: 64px;
   border-radius: 100px;
   background-color: ${({ theme }) => theme.text};
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 16px 8px 8px rgba(0, 0, 0, 0.25);
 `;
 
 const SlideText = styled(BaseText)`
@@ -57,7 +60,14 @@ const SlideText = styled(BaseText)`
   padding-left: 24px;
 `;
 
-export const ContinueSlider = ({ onSlideComplete }: ContinueSliderProps) => {
+const LoadingIndicatorContainer = styled(View)`
+  position: absolute;
+  align-self: center;
+  justify-self: center;
+  z-index: 100;
+`;
+
+export const ContinueSlider = ({ onSlideComplete, reset, loading }: ContinueSliderProps) => {
   const theme = useTheme();
 
   const [maxWidth, setMaxWidth] = useState(0);
@@ -93,6 +103,7 @@ export const ContinueSlider = ({ onSlideComplete }: ContinueSliderProps) => {
     () =>
       gestureActive
         ? Gesture.Pan()
+            .enabled(gestureActive)
             .onChange((event) => {
               if (event.changeX > 0) {
                 if (width.value + event.changeX >= maxWidth * 0.75) {
@@ -120,6 +131,16 @@ export const ContinueSlider = ({ onSlideComplete }: ContinueSliderProps) => {
         : Gesture.Pan(),
     [gestureActive, width, maxWidth, handleGestureComplete, scale, outerScale],
   );
+
+  useMemo(() => {
+    if (reset) {
+      setGestureActive(true);
+      width.value = withSpring(64, { damping: 15, stiffness: 100 });
+      scale.value = 1;
+      outerScale.value = 1;
+    }
+  }, [outerScale, reset, scale, width]);
+
   return (
     <Animated.View style={outerStyle}>
       <SlideContainer
@@ -128,6 +149,11 @@ export const ContinueSlider = ({ onSlideComplete }: ContinueSliderProps) => {
         }}
         colors={['#434343', '#303030']}
       >
+        {loading && (
+          <LoadingIndicatorContainer>
+            <LoadingIndicator size={LoaderIndicatorSizes.md} />
+          </LoadingIndicatorContainer>
+        )}
         <SlideText>Slide to continue</SlideText>
         <GestureDetector gesture={panGesture}>
           <SlideButton style={slideWidthStyle}>
@@ -141,7 +167,11 @@ export const ContinueSlider = ({ onSlideComplete }: ContinueSliderProps) => {
                 borderRadius: 100,
               }}
             >
-              <ArrowRight width={48} height={48} fill={theme?.background} />
+              {!loading && (
+                <Animated.View exiting={FadeOut}>
+                  <ArrowRight width={48} height={48} fill={theme?.background} />
+                </Animated.View>
+              )}
             </View>
           </SlideButton>
         </GestureDetector>

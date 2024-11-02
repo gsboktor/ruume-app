@@ -19,7 +19,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "update-env": "node ./update-env.mjs"
   },
   "jest": {
     "preset": "jest-expo",

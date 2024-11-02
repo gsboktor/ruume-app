@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ImageSourcePropType, KeyboardAvoidingView, ScrollView, View } from 'react-native';
+import { Button, ImageSourcePropType, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 
 import PencilEditIcon from '@Ruume/assets/icons/pencil_edit.svg';
 import placeholderImg from '@Ruume/assets/images/placeholder.png';
@@ -31,7 +31,8 @@ const RuumeProfileFooterContent = styled(View)`
 export default function RuumeProfileSetup() {
   const theme = useTheme();
   const [img] = useState<ImageSourcePropType>(placeholderImg);
-
+  const [resetSlider, setResetSlider] = useState(false);
+  const [loading, setLoading] = useState(false);
   return (
     <RuumeProfileSetupContainer contentContainerStyle={{ flex: 1 }}>
       <RuumeProfileMainContent>
@@ -42,9 +43,23 @@ export default function RuumeProfileSetup() {
         <BaseText style={{ fontSize: 16, color: theme?.textLightGray, alignSelf: 'center' }}>
           Tap to add a picture
         </BaseText>
+        <Button
+          title="Reset"
+          onPress={() => {
+            setResetSlider(true);
+            setLoading(false);
+          }}
+        />
       </RuumeProfileMainContent>
       <RuumeProfileFooterContent>
-        <ContinueSlider onSlideComplete={() => {}} reset={false} loading={false} />
+        <ContinueSlider
+          onSlideComplete={() => {
+            setResetSlider(false);
+            setLoading(true);
+          }}
+          reset={resetSlider}
+          loading={loading}
+        />
       </RuumeProfileFooterContent>
       <KeyboardAvoidingView
         behavior="padding"
