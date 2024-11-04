@@ -143,11 +143,10 @@ export const ContinueSlider = ({ onSlideComplete, reset, loading, disabled, noti
     runOnJS(onSlideComplete)();
 
     outerScale.value = withSequence(withTiming(1.2, { duration: 200 }), withSpring(1, { damping: 10, stiffness: 100 }));
+    scale.value = 1.175;
     width.value = withTiming(maxWidth, { duration: 200, easing: Easing.elastic(0.75) });
     iconOpacity.value = withTiming(0, { duration: 400 });
-
-    scale.value = 1.175;
-  }, [maxWidth, onSlideComplete, outerScale, scale, width, iconOpacity]);
+  }, [maxWidth, outerScale, scale, width, iconOpacity, onSlideComplete]);
 
   const panGesture = useMemo(
     () =>

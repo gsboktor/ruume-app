@@ -1,15 +1,18 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ImageSourcePropType, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 
 import PencilEditIcon from '@Ruume/assets/icons/pencil_edit.svg';
 import placeholderImg from '@Ruume/assets/images/placeholder.png';
 import { useLocalImagePicker, useUploadAvatar } from '@Ruume/hooks';
+import { useCreateProfile } from '@Ruume/hooks/useCreateProfile';
 import { useGetSession } from '@Ruume/hooks/useGetSession';
 import { notificationAtom } from '@Ruume/store';
+import { hasInitedProfileAtom } from '@Ruume/store/profile';
 import { BaseText, ContinueSlider, FormField, ProfilePicturePicker } from '@Ruume/ui';
 import { vh } from '@Ruume/utils/viewport';
 
 import { SaveFormat } from 'expo-image-manipulator';
+import { router } from 'expo-router';
 import { useSetAtom } from 'jotai';
 import styled, { useTheme } from 'styled-components/native';
 
@@ -38,14 +41,28 @@ export default function RuumeProfileSetup() {
   const theme = useTheme();
 
   const { data: session } = useGetSession();
-  const { mutate: uploadFn, isError: uploadAvatarError, isPending: uploadAvatarPending } = useUploadAvatar();
+  const {
+    mutate: uploadFn,
+    isError: uploadAvatarError,
+    isPending: uploadAvatarPending,
+    data: uploadAvatarData,
+  } = useUploadAvatar();
+
+  const {
+    mutateAsync: createProfileFn,
+    isError: createProfileError,
+    isPending: createProfilePending,
+    data: createProfileData,
+  } = useCreateProfile(session?.user.id);
+
   const { pickImage, loading: pickerLoading } = useLocalImagePicker({ aspect: [1, 1] });
 
   const [img, setImg] = useState<ImageSourcePropType>(placeholderImg);
   const [resetSlider, setResetSlider] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
+
   const setNotification = useSetAtom(notificationAtom);
+  const setHasInitedProfile = useSetAtom(hasInitedProfileAtom);
 
   const getImageFromPicker = useCallback(async () => {
     const result = await pickImage();
@@ -62,9 +79,14 @@ export default function RuumeProfileSetup() {
   }, [pickImage, session?.user.id, uploadFn]);
 
   const handleSubmit = useCallback(async () => {
-    setLoading(true);
     setResetSlider(false);
-  }, []);
+    if (createProfilePending) return;
+
+    await createProfileFn({
+      username: name,
+      avatar_url: uploadAvatarData?.path ?? null,
+    });
+  }, [createProfileFn, createProfilePending, name, uploadAvatarData?.path]);
 
   useMemo(() => {
     if (!uploadAvatarPending) {
@@ -80,6 +102,24 @@ export default function RuumeProfileSetup() {
       }
     }
   }, [setNotification, uploadAvatarError, uploadAvatarPending]);
+
+  useEffect(() => {
+    if (createProfileError) {
+      setResetSlider(true);
+      setNotification({
+        default: {
+          visible: true,
+          message: 'Whoops! Something failed.',
+          messageContent: 'Sorry about that! Try again in a couple minutes.',
+        },
+      });
+    }
+
+    if (!createProfilePending && createProfileData?.id && !createProfileError) {
+      setHasInitedProfile(true);
+      router.replace('/(tabs)/ruume-home');
+    }
+  }, [createProfileData?.id, createProfileError, createProfilePending, setHasInitedProfile, setNotification]);
 
   return (
     <>
@@ -130,7 +170,7 @@ export default function RuumeProfileSetup() {
           }}
           onSlideComplete={handleSubmit}
           reset={resetSlider}
-          loading={loading}
+          loading={createProfilePending}
         />
       </StyledSlider>
     </>

@@ -1,3 +1,6 @@
+/* eslint-disable simpleImportSort/imports */
+import 'react-native-get-random-values';
+
 import React from 'react';
 import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';

@@ -1,6 +1,6 @@
 import { queryClient } from '@Ruume/clients/react-query';
 import { profileService } from '@Ruume/services/profile';
-import { AvatarUploadType } from '@Ruume/types/services';
+import { AvatarUploadType } from '@Ruume/types/services/profile';
 
 import { StorageError } from '@supabase/storage-js';
 import { useMutation } from '@tanstack/react-query';
@@ -9,7 +9,6 @@ export const useUploadAvatar = () => {
   return useMutation({
     mutationFn: async (payload: AvatarUploadType) => {
       try {
-        console.log('IN UPLOAD AVATAR HOOK', payload.fileName, payload.filePath, payload.ext);
         const data = await profileService.uploadAvatar(payload.fileName, payload.filePath, payload.ext);
 
         return data;
