@@ -4,6 +4,7 @@ import { Image, ImageSourcePropType, View, ViewProps } from 'react-native';
 import AddCircleIcon from '@Ruume/assets/icons/add.svg';
 
 import { HapticPressable } from './HapticPressable';
+import { LoadingIndicator } from './LoadingIndicator';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import styled, { useTheme } from 'styled-components/native';
@@ -11,6 +12,7 @@ import styled, { useTheme } from 'styled-components/native';
 type ProfilePicturePickerProps = {
   onAddPicture: () => void;
   img: ImageSourcePropType;
+  loading: boolean;
 } & ViewProps;
 
 const ProfilePickerWrapper = styled(View)`
@@ -19,8 +21,8 @@ const ProfilePickerWrapper = styled(View)`
 
 const ProfilePictureContainer = styled(View)`
   display: flex;
-  width: 102px;
-  height: 102px;
+  width: 124px;
+  height: 124px;
   border-radius: 100px;
   background-color: ${({ theme }) => theme.background};
   border: 6px solid ${({ theme }) => theme.text};
@@ -34,7 +36,7 @@ const ProfileImage = styled(Image)`
   border-radius: 100px;
 `;
 
-export const ProfilePicturePicker = ({ onAddPicture, img, ...rest }: ProfilePicturePickerProps) => {
+export const ProfilePicturePicker = ({ onAddPicture, img, loading = false, ...rest }: ProfilePicturePickerProps) => {
   const theme = useTheme();
   return (
     <HapticPressable
@@ -44,13 +46,13 @@ export const ProfilePicturePicker = ({ onAddPicture, img, ...rest }: ProfilePict
     >
       <ProfilePickerWrapper {...rest}>
         <ProfilePictureContainer>
-          <ProfileImage source={img} />
+          {!loading ? <ProfileImage source={img} /> : <LoadingIndicator inverted />}
         </ProfilePictureContainer>
         <AddCircleIcon
-          width={42}
-          height={42}
+          width={62}
+          height={62}
           fill={theme?.text}
-          style={{ position: 'absolute', bottom: -5, left: -18, zIndex: 100 }}
+          style={{ position: 'absolute', bottom: -18, left: -32, zIndex: 100 }}
         />
       </ProfilePickerWrapper>
     </HapticPressable>

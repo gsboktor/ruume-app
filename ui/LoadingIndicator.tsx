@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withTiming } from 'react-native-reanimated';
+import Animated, {
+  runOnUI,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { LoaderIndicatorSizes } from '@Ruume/types/ui';
 import { sizeMap } from '@Ruume/utils/formatters';
@@ -12,8 +19,6 @@ const BreathingCirclesContainer = styled(View)<{ size: number }>`
   align-items: center;
   display: flex;
   flex-direction: row;
-  width: fit-content;
-  height: fit-content;
   gap: ${({ size }) => size / 1.5}px;
 `;
 
@@ -30,30 +35,37 @@ type LoadingIndicatorProps = {
 };
 
 export const LoadingIndicator = ({ inverted, size = LoaderIndicatorSizes.sm }: LoadingIndicatorProps) => {
-  const scale1 = useSharedValue(0.75);
-  const scale2 = useSharedValue(0.75);
-  const scale3 = useSharedValue(0.75);
+  const height1 = useSharedValue(sizeMap[size]);
+  const height2 = useSharedValue(sizeMap[size]);
+  const height3 = useSharedValue(sizeMap[size]);
 
-  const circleScale1 = useAnimatedStyle(() => ({
-    transform: [{ scale: scale1.value }],
+  const circleHeight1 = useAnimatedStyle(() => ({
+    height: height1.value,
   }));
-  const circleScale2 = useAnimatedStyle(() => ({
-    transform: [{ scale: scale2.value }],
+  const circleHeight2 = useAnimatedStyle(() => ({
+    height: height2.value,
   }));
-  const circleScale3 = useAnimatedStyle(() => ({
-    transform: [{ scale: scale3.value }],
+  const circleHeight3 = useAnimatedStyle(() => ({
+    height: height3.value,
   }));
 
-  scale1.value = withDelay(0, withRepeat(withTiming(1.25, { duration: 800 }), -1, true));
-  scale2.value = withDelay(200, withRepeat(withTiming(1.25, { duration: 800 }), -1, true));
-  scale3.value = withDelay(400, withRepeat(withTiming(1.25, { duration: 800 }), -1, true));
+  const startAnimation = useCallback(() => {
+    'worklet';
+    height1.value = withDelay(0, withRepeat(withTiming(height1.value * 2.75, { duration: 600 }), -1, true));
+    height2.value = withDelay(300, withRepeat(withTiming(height2.value * 2.75, { duration: 600 }), -1, true));
+    height3.value = withDelay(600, withRepeat(withTiming(height3.value * 2.75, { duration: 600 }), -1, true));
+  }, [height1, height2, height3]);
 
-  const animations = [circleScale1, circleScale2, circleScale3];
+  const animations = [circleHeight1, circleHeight2, circleHeight3];
+
+  useMemo(() => {
+    runOnUI(startAnimation)();
+  }, [startAnimation]);
 
   return (
     <BreathingCirclesContainer size={sizeMap[size]}>
-      {Array.from({ length: 3 }).map((_, idx) => {
-        return <AnimatedCircle inverted={inverted} size={sizeMap[size]} key={idx} style={animations[idx]} />;
+      {animations.map((animation, idx) => {
+        return <AnimatedCircle inverted={inverted} size={sizeMap[size]} key={idx} style={animation} />;
       })}
     </BreathingCirclesContainer>
   );

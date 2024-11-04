@@ -29,7 +29,7 @@ export default function RuumeAuthHeader() {
 
   return (
     <HeaderContainer>
-      <BaseText type="stylized" style={[{ fontSize: 64, color: theme?.text }, fadeInAnimation]}>
+      <BaseText type="stylized" style={[{ fontSize: 48, color: theme?.text }, fadeInAnimation]}>
         Ruume
       </BaseText>
     </HeaderContainer>

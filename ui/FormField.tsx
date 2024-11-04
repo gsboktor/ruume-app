@@ -115,7 +115,9 @@ export const FormField = ({
       </FormFieldMainContent>
 
       {validationMessage && (
-        <BaseText style={{ color: theme?.text, fontSize: 12, alignSelf: 'flex-end' }}>{validationMessage}</BaseText>
+        <BaseText style={{ color: theme?.text, fontSize: 12, alignSelf: 'flex-end', paddingRight: 16 }}>
+          {validationMessage}
+        </BaseText>
       )}
     </FormFieldContainer>
   );

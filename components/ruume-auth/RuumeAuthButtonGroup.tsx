@@ -1,7 +1,7 @@
 import React from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 
-import { BaseText, HapticPressable } from '@Ruume/ui';
+import { BaseText, HapticPressable, LoadingIndicator } from '@Ruume/ui';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import styled from 'styled-components/native';
@@ -46,7 +46,7 @@ export const RuumeAuthButtonGroup = ({ handleSubmit, isLoading, label, offset }:
       >
         <ActiveButtonContainer>
           <BaseText type="stylized" style={{ fontSize: 32, height: 'auto' }}>
-            {isLoading ? 'Loading...' : label}
+            {isLoading ? <LoadingIndicator /> : label}
           </BaseText>
         </ActiveButtonContainer>
       </HapticPressable>

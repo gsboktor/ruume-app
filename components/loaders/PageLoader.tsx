@@ -1,7 +1,8 @@
 import React from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 
-import { Colors } from '@Ruume/ui/colors';
+import { LoaderIndicatorSizes } from '@Ruume/types/ui';
+import { LoadingIndicator } from '@Ruume/ui';
 
 import styled from 'styled-components/native';
 
@@ -14,7 +15,7 @@ const PageLoaderContainer = styled(View)`
 export const PageLoader = () => {
   return (
     <PageLoaderContainer>
-      <ActivityIndicator testID="page-loader" size="large" color={Colors.white} />
+      <LoadingIndicator size={LoaderIndicatorSizes.lg} />
     </PageLoaderContainer>
   );
 };
