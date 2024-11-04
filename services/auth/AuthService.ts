@@ -1,6 +1,5 @@
 import { supabase } from '@Ruume/clients/supabase';
-import { IAuthService, SignInType, SignUpType } from '@Ruume/types/services';
-import { VerifyOTPType } from '@Ruume/types/services/VerifyOTP';
+import { IAuthService, SignInType, SignUpType, VerifyOTPType } from '@Ruume/types/services/auth';
 
 import { SupabaseClient } from '@supabase/supabase-js';
 

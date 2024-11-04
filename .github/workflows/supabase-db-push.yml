@@ -1,3 +1,5 @@
+# TODO: Check the target branch (develop or main, and set the enviornment secrets accordingly)
+# Example: `${{github.ref_name == 'main' ? secrets.SUPABASE_PROJECT_REF_ID : secrets.PRD_SUPABASE_PROJECT_REF_ID}}`
 name: Supabase-CI
 
 on:
@@ -35,8 +37,8 @@ jobs:
 
       - name: Verify generated types are checked in
         run: |
-          supabase gen types typescript --local > types.gen.ts
-          if ! git diff --ignore-space-at-eol --exit-code --quiet types.gen.ts; then
+          supabase gen types typescript --local > database.types.ts
+          if ! git diff --ignore-space-at-eol --exit-code --quiet database.types.ts; then
             echo "Detected uncommitted changes after build. See status below:"
             git diff
             exit 1

@@ -1,5 +1,9 @@
+/* eslint-disable simpleImportSort/imports */
+import 'react-native-get-random-values';
+
 import React from 'react';
 import { useColorScheme } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { clientPersister, queryClient } from '@Ruume/clients/react-query';
@@ -31,20 +35,22 @@ function AppContent() {
 
   return (
     <SafeAreaProvider>
-      <ThemeProvider theme={colorScheme === 'dark' ? appTheme.dark : appTheme.light}>
-        <NotificationToast />
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            animation: 'none',
-            contentStyle: {
-              backgroundColor: Colors.black,
-            },
-          }}
-        >
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-        </Stack>
-      </ThemeProvider>
+      <GestureHandlerRootView>
+        <ThemeProvider theme={colorScheme === 'dark' ? appTheme.dark : appTheme.light}>
+          <NotificationToast />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              animation: 'none',
+              contentStyle: {
+                backgroundColor: Colors.black,
+              },
+            }}
+          >
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+          </Stack>
+        </ThemeProvider>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }

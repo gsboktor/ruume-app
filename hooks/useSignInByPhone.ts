@@ -1,5 +1,5 @@
 import { authService } from '@Ruume/services/auth';
-import { SignInType } from '@Ruume/types/services';
+import { SignInType } from '@Ruume/types/services/auth';
 
 import { AuthError } from '@supabase/supabase-js';
 import { useMutation } from '@tanstack/react-query';

@@ -16,6 +16,7 @@ android/
 .env
 .env.local
 .env.production
+update-env.mjs
 
 # macOS
 .DS_Store

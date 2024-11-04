@@ -1,5 +1,5 @@
 import { authService } from '@Ruume/services/auth';
-import { VerifyOTPType } from '@Ruume/types/services/VerifyOTP';
+import { VerifyOTPType } from '@Ruume/types/services/auth';
 
 import { AuthError } from '@supabase/supabase-js';
 import { useMutation } from '@tanstack/react-query';

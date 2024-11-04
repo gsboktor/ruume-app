@@ -1,6 +1,7 @@
 /* eslint-disable simpleImportSort/imports */
 import 'react-native-url-polyfill/auto';
 
+import { Database } from '@Ruume/database.types';
 import { createClient, SupportedStorage } from '@supabase/supabase-js';
 import { SupabaseStorage } from '../mmkv';
 
@@ -10,7 +11,7 @@ const mmkvSupabaseSupportedStorage = {
   removeItem: (key) => SupabaseStorage.delete(key),
 } satisfies SupportedStorage;
 
-export const supabase = createClient(
+export const supabase = createClient<Database>(
   process.env.EXPO_PUBLIC_SUPABASE_URL ?? '',
   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '',
   {

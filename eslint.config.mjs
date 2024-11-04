@@ -31,6 +31,7 @@ export default [
       '**/metro.config.js',
       '**/ios',
       '**/android',
+      '**/database.types.ts',
     ],
   },
   ...fixupConfigRules(

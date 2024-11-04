@@ -61,7 +61,7 @@ export const FormField = ({
   header,
   onBlur,
   onFocus,
-  style,
+  style: textStyle,
   placeholderTextColor,
   ...rest
 }: FormFieldProps) => {
@@ -107,7 +107,7 @@ export const FormField = ({
             onBlur={handleBlur}
             onFocus={handleFocus}
             ref={inputRef}
-            style={style}
+            style={textStyle}
             placeholderTextColor={placeholderTextColor}
             {...rest}
           />
@@ -115,7 +115,9 @@ export const FormField = ({
       </FormFieldMainContent>
 
       {validationMessage && (
-        <BaseText style={{ color: theme?.text, fontSize: 12, alignSelf: 'flex-end' }}>{validationMessage}</BaseText>
+        <BaseText style={{ color: theme?.text, fontSize: 12, alignSelf: 'flex-end', paddingRight: 16 }}>
+          {validationMessage}
+        </BaseText>
       )}
     </FormFieldContainer>
   );
