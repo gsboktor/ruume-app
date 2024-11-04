@@ -44,7 +44,7 @@ jobs:
             exit 1
           fi
 
-  Push-db-dryrun:
+  Push-db:
     runs-on: ubuntu-latest
     environment: dev
     env:
