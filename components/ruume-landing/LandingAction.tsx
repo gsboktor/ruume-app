@@ -36,7 +36,6 @@ const LandingActionText = styled(BaseText)`
 `;
 
 export const LandingAction = () => {
-  // const router = useRouter();
   const width = useSharedValue(275);
   const height = useSharedValue(100);
 

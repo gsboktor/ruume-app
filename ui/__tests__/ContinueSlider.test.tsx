@@ -10,10 +10,6 @@ import { act } from '@testing-library/react-native';
 
 import { ContinueSlider } from '../ContinueSlider';
 
-import * as dotenv from 'dotenv';
-
-dotenv.config({ path: '.env.local' });
-
 jest.mock('@Ruume/assets/icons/cancel.svg', () => 'CancelIcon');
 jest.mock('@Ruume/assets/icons/arrow_slim.svg', () => 'ArrowSlimIcon');
 

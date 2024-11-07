@@ -4,7 +4,7 @@ import { QueryStorage } from '../mmkv';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 
 const clientStorage = {
-  setItem: (key: any, value: any) => {
+  setItem: (key: string, value: string) => {
     QueryStorage.set(key, value);
   },
   getItem: (key: any) => {

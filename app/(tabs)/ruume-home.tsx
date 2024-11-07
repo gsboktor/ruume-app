@@ -39,14 +39,6 @@ export default function RuumeHome() {
       <Settings width={24} height={24} fill="white" />
       <Button title="Sign Out" onPress={mockSignOut} />
       {!avatarLoading && avatar && (
-        //TODO: Create an image component that reloads cache when avatar data changes in react query
-        // Array.from({ length: 10 }).map((_, idx) => (
-        //   <Image
-        //     key={idx}
-        //     style={{ width: 275, height: 275, alignSelf: 'center' }}
-        //     source={{ uri: avatar + `?${Date.now()}`, cache: 'reload' }}
-        //   />
-        // ))
         <FlatList
           data={Array.from({ length: 10 })}
           renderItem={({ index }) => (
