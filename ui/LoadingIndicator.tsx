@@ -63,7 +63,7 @@ export const LoadingIndicator = ({ inverted, size = LoaderIndicatorSizes.sm }: L
   }, [startAnimation]);
 
   return (
-    <BreathingCirclesContainer size={sizeMap[size]}>
+    <BreathingCirclesContainer size={sizeMap[size]} testID="loading-indicator">
       {animations.map((animation, idx) => {
         return <AnimatedCircle inverted={inverted} size={sizeMap[size]} key={idx} style={animation} />;
       })}

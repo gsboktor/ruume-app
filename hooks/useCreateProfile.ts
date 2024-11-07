@@ -1,20 +1,20 @@
-import { queryClient } from '@Ruume/clients/react-query';
+import { useTransition } from '@Ruume/providers/TransitionsManager';
 import { profileService } from '@Ruume/services/profile';
+import { notificationAtom } from '@Ruume/store';
 import { CreateProfileRequest } from '@Ruume/types/services/profile';
 
 import { useMutation } from '@tanstack/react-query';
+import { useSetAtom } from 'jotai';
 
 export const useCreateProfile = (uid?: string) => {
+  const setNotification = useSetAtom(notificationAtom);
+  const { enqueue } = useTransition();
+
   return useMutation({
-    mutationKey: ['create-profile', uid],
     mutationFn: async (payload: Omit<CreateProfileRequest, 'user_id'>) => {
       try {
         if (!uid) {
           throw new Error('No uid provided');
-        }
-        const activeMutation = queryClient.getMutationCache().find({ mutationKey: ['create-profile', uid] });
-        if (activeMutation?.state.status === 'pending') {
-          return;
         }
 
         const profileRes = await profileService.createProfile({ ...payload, user_id: uid });
@@ -30,5 +30,24 @@ export const useCreateProfile = (uid?: string) => {
       }
     },
     retry: 1,
+    onSuccess: (data) => {
+      if (data?.id) {
+        setTimeout(() => {
+          enqueue('/(tabs)/ruume-home');
+        }, 500);
+      }
+    },
+    onError: () => {
+      if (!uid) {
+        enqueue('/(auth)/ruume-sign-in-page');
+      }
+      setNotification({
+        default: {
+          visible: true,
+          message: 'Whoops! Something failed.',
+          messageContent: 'Sorry about that! Try signing in again.',
+        },
+      });
+    },
   });
 };

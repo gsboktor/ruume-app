@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -7,7 +7,6 @@ import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
-  withRepeat,
   withSequence,
   withSpring,
   withTiming,
@@ -25,12 +24,11 @@ import { LoadingIndicator } from './LoadingIndicator';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSetAtom } from 'jotai';
-import styled, { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components/native';
 
 export type ContinueSliderProps = {
   onSlideComplete: () => void;
   reset: boolean;
-  loading: boolean;
   disabled: boolean;
   notification: NotificationType;
 };
@@ -71,7 +69,7 @@ const LoadingIndicatorContainer = styled(View)`
   z-index: 100;
 `;
 
-export const ContinueSlider = ({ onSlideComplete, reset, loading, disabled, notification }: ContinueSliderProps) => {
+export const ContinueSlider = ({ onSlideComplete, reset, disabled, notification }: ContinueSliderProps) => {
   const theme = useTheme();
 
   const [maxWidth, setMaxWidth] = useState(0);
@@ -82,21 +80,12 @@ export const ContinueSlider = ({ onSlideComplete, reset, loading, disabled, noti
   const scale = useSharedValue(1);
   const outerScale = useSharedValue(1);
   const outerX = useSharedValue(0);
-
-  const iconX = useSharedValue(0);
   const iconOpacity = useSharedValue(1);
-
-  const iconBobStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateX: iconX.value }],
-      opacity: iconOpacity.value,
-    };
-  });
 
   const slideWidthStyle = useAnimatedStyle(() => {
     return {
       width: width.value,
-      transform: [{ scale: withSpring(scale.value) }],
+      transform: [{ scale: scale.value }],
     };
   });
 
@@ -121,14 +110,6 @@ export const ContinueSlider = ({ onSlideComplete, reset, loading, disabled, noti
     };
   });
 
-  const arrowBobLoop = useCallback(() => {
-    iconX.value = withRepeat(
-      withSequence(withTiming(3, { duration: 800 }), withTiming(-1, { duration: 800 })),
-      -1,
-      true,
-    );
-  }, [iconX]);
-
   const resetSlider = useCallback(() => {
     setGestureActive(true);
     width.value = withSpring(64, { damping: 15, stiffness: 100 });
@@ -143,7 +124,7 @@ export const ContinueSlider = ({ onSlideComplete, reset, loading, disabled, noti
     runOnJS(onSlideComplete)();
 
     outerScale.value = withSequence(withTiming(1.2, { duration: 200 }), withSpring(1, { damping: 10, stiffness: 100 }));
-    scale.value = 1.175;
+    scale.value = withSpring(1.175);
     width.value = withTiming(maxWidth, { duration: 200, easing: Easing.elastic(0.75) });
     iconOpacity.value = withTiming(0, { duration: 400 });
   }, [maxWidth, outerScale, scale, width, iconOpacity, onSlideComplete]);
@@ -163,13 +144,11 @@ export const ContinueSlider = ({ onSlideComplete, reset, loading, disabled, noti
               }
             })
             .onTouchesDown(() => {
-              scale.value = 1.175;
               outerScale.value = withSpring(1.05, { damping: 15, stiffness: 100 });
               runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Medium);
             })
             .onTouchesUp(() => {
               if (width.value < maxWidth * 0.575) {
-                scale.value = 1;
                 outerScale.value = withSpring(1, { damping: 15, stiffness: 100 });
                 width.value = withSpring(64, { damping: 15, stiffness: 100 });
                 runOnJS(Haptics.notificationAsync)(Haptics.NotificationFeedbackType.Success);
@@ -180,52 +159,49 @@ export const ContinueSlider = ({ onSlideComplete, reset, loading, disabled, noti
                 runOnJS(handleGestureComplete)();
               }
             })
-        : Gesture.Pan().onTouchesDown(() => {
-            if (!loading) {
-              outerX.value = withSequence(
-                withTiming(-12, { duration: 75 }),
-                withTiming(12, { duration: 75 }),
-                withTiming(0, { duration: 75 }),
-              );
-              runOnJS(Haptics.notificationAsync)(Haptics.NotificationFeedbackType.Error);
-              runOnJS(setNotification)({ default: notification });
-              return;
-            }
-          }),
+            .withTestId('gesture-pan')
+        : Gesture.Pan()
+            .onTouchesDown(() => {
+              if (gestureActive) {
+                outerX.value = withSequence(
+                  withTiming(-12, { duration: 75 }),
+                  withTiming(12, { duration: 75 }),
+                  withTiming(0, { duration: 75 }),
+                );
+                runOnJS(Haptics.notificationAsync)(Haptics.NotificationFeedbackType.Error);
+                runOnJS(setNotification)({ default: notification });
+                return;
+              }
+            })
+            .withTestId('gesture-pan'),
     [
       gestureActive,
       disabled,
       width,
       maxWidth,
       handleGestureComplete,
-      scale,
       outerScale,
-      loading,
       outerX,
       setNotification,
       notification,
     ],
   );
 
-  useMemo(() => {
+  useEffect(() => {
     if (reset) {
       resetSlider();
     }
-
-    if (!disabled) {
-      arrowBobLoop();
-    }
-  }, [reset, resetSlider, disabled, arrowBobLoop]);
+  }, [reset, resetSlider]);
 
   return (
-    <Animated.View style={outerStyle}>
+    <Animated.View style={outerStyle} testID="continue-slider">
       <SlideContainer
         onLayout={(event) => {
           setMaxWidth(event.nativeEvent.layout.width);
         }}
         colors={['#434343', '#303030']}
       >
-        {loading && (
+        {!gestureActive && (
           <LoadingIndicatorContainer>
             <LoadingIndicator size={LoaderIndicatorSizes.md} />
           </LoadingIndicatorContainer>
@@ -245,14 +221,12 @@ export const ContinueSlider = ({ onSlideComplete, reset, loading, disabled, noti
                 borderRadius: 100,
               }}
             >
-              {!loading && (
+              {gestureActive && (
                 <>
                   {disabled ? (
-                    <Cancel width={32} height={32} fill={theme?.textSubtle} />
+                    <Cancel width={32} height={32} fill={theme?.textSubtle} testID="cancel-icon" />
                   ) : (
-                    <Animated.View style={iconBobStyle}>
-                      <ArrowSlim width={48} height={48} fill={theme?.background} />
-                    </Animated.View>
+                    <ArrowSlim width={48} height={48} fill={theme?.background} testID="arrow-icon" />
                   )}
                 </>
               )}

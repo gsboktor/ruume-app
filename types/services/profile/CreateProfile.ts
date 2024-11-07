@@ -1,5 +1,5 @@
 import { Tables } from '@Ruume/database.types';
 
-export type CreateProfileType = Tables<'profiles'>;
+export type ProfileType = Tables<'profiles'>;
 
-export type CreateProfileRequest = Omit<CreateProfileType, 'id' | 'updated_at' | 'created_at' >;
+export type CreateProfileRequest = Omit<ProfileType, 'id' | 'updated_at' | 'created_at' >;

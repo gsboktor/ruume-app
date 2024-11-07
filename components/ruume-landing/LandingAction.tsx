@@ -9,12 +9,12 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
+import { useTransition } from '@Ruume/providers/TransitionsManager';
 import { formTypeAtom } from '@Ruume/store/auth';
 import { FormType } from '@Ruume/types/forms';
 import { BaseText, HapticPressable } from '@Ruume/ui';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import { useSetAtom } from 'jotai';
 import styled from 'styled-components/native';
 
@@ -36,19 +36,19 @@ const LandingActionText = styled(BaseText)`
 `;
 
 export const LandingAction = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const width = useSharedValue(275);
   const height = useSharedValue(100);
+
+  const { enqueue } = useTransition();
 
   const [contentVisible, setContentVisible] = useState(true);
   const setFormType = useSetAtom(formTypeAtom);
 
   const routeWithDelay = useCallback(() => {
-    setTimeout(() => {
-      setFormType(FormType.SIGN_UP);
-      router.push('/(auth)/ruume-sign-up-page');
-    }, 250);
-  }, [router, setFormType]);
+    setFormType(FormType.SIGN_UP);
+    enqueue('/(auth)/ruume-sign-up-page');
+  }, [setFormType, enqueue]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     width: width.value,

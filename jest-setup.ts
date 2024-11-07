@@ -1,6 +1,7 @@
 /* eslint-disable simpleImportSort/imports */
-import { mockHaptics, mockReanimated, mockSafeArea } from '@Ruume/__mocks__';
+import { mockHaptics, mockLinearGradient, mockReanimated, mockSafeArea } from '@Ruume/__mocks__';
 import '@testing-library/react-native/extend-expect';
+import 'react-native-gesture-handler/jestSetup';
 
 jest.mock('expo-haptics', () => ({
   ...mockHaptics,
@@ -20,6 +21,11 @@ jest.mock('styled-components', () => ({
   useTheme: jest.fn(),
 }));
 
+jest.mock('expo-linear-gradient', () => ({
+  ...mockLinearGradient,
+}));
+
+import 'react-native-gesture-handler/jest-utils';
 import 'react-native-reanimated';
 import { setUpTests } from 'react-native-reanimated';
 import 'styled-components';

@@ -1,16 +1,17 @@
 import React from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
+import { useKeyboardAvoiding } from '@Ruume/hooks';
 import { BaseText, HapticPressable, LoadingIndicator } from '@Ruume/ui';
 
 import { ImpactFeedbackStyle } from 'expo-haptics';
 import styled from 'styled-components/native';
 
-const ButtonGroupContainer = styled(KeyboardAvoidingView)`
+const ButtonGroupContainer = styled(Animated.View)`
   display: flex;
   flex-direction: row;
   position: absolute;
-  bottom: 70px;
   align-self: center;
   align-items: center;
   justify-content: center;
@@ -36,9 +37,10 @@ export type RuumeAuthButtonGroupProps = {
   offset?: number;
 };
 
-export const RuumeAuthButtonGroup = ({ handleSubmit, isLoading, label, offset }: RuumeAuthButtonGroupProps) => {
+export const RuumeAuthButtonGroup = ({ handleSubmit, isLoading, label }: RuumeAuthButtonGroupProps) => {
+  const { animatedStyle } = useKeyboardAvoiding(70);
   return (
-    <ButtonGroupContainer behavior="padding" keyboardVerticalOffset={offset}>
+    <ButtonGroupContainer style={animatedStyle}>
       <HapticPressable
         style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}
         onPress={handleSubmit}

@@ -48,7 +48,7 @@ export const SignInForm = () => {
               maxLength={10}
               value={value}
               Icon={Phone}
-              style={{ fontSize: 20, color: theme?.text, paddingRight: 8 }}
+              style={{ fontSize: 20, color: theme?.text, paddingRight: 8, width: '100%' }}
             />
           )}
         />
@@ -64,7 +64,7 @@ export const SignInForm = () => {
               header="Password"
               placeholderTextColor={theme?.textLightGray}
               value={value}
-              style={{ fontSize: 20, color: theme?.text, paddingRight: 8 }}
+              style={{ fontSize: 20, color: theme?.text, paddingRight: 8, width: '100%' }}
               Icon={Key}
               onChangeText={onChange}
             />

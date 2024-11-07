@@ -1,20 +1,13 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { KeyboardAvoidingView, ScrollView, TextInput, View } from 'react-native';
 
 import { RuumeAuthButtonGroup, RuumeAuthDisclaimer } from '@Ruume/components/ruume-auth';
 import { RuumeOTPField } from '@Ruume/components/ruume-otp';
-import { useRefArray } from '@Ruume/hooks';
-import { useVerifyOTP } from '@Ruume/hooks/useVerifyOTP';
-import { notificationAtom } from '@Ruume/store';
-import { signUpFormAtom } from '@Ruume/store/auth';
+import { useRefArray, useVerifyOTP } from '@Ruume/hooks';
 import { BaseText } from '@Ruume/ui';
 import { vh, vw } from '@Ruume/utils/viewport';
 
-import { router } from 'expo-router';
-import { useAtomValue, useSetAtom } from 'jotai';
 import styled, { useTheme } from 'styled-components';
-
-const OTP_LENGTH = 6;
 
 const RuumeOTPPageContainer = styled(ScrollView)`
   padding: 16px;
@@ -46,51 +39,11 @@ export default function RuumeOTPPage() {
   const digitRefs = useRefArray<TextInput>();
   const otpDigitsValue = useRefArray<string>();
 
-  const setNotification = useSetAtom(notificationAtom);
-  const signUpDetails = useAtomValue(signUpFormAtom);
-
-  const { mutate: verifyOTP, isPending: verifyOTPLoading, error: verifyOTPError } = useVerifyOTP();
+  const { mutate: verifyOTP, isPending: verifyOTPLoading } = useVerifyOTP();
 
   const handleSubmit = useCallback(async () => {
-    const phoneNumber = signUpDetails.phoneNumber;
-    if (!phoneNumber) {
-      router.replace('/(auth)/ruume-sign-up-page');
-      setNotification({
-        default: {
-          visible: true,
-          message: 'Please sign in again',
-          messageContent: 'Please sign in again to continue.',
-        },
-      });
-      return;
-    }
-    const code = otpDigitsValue.current.join('');
-
-    if (!code || code.length !== OTP_LENGTH) {
-      setNotification({
-        default: {
-          visible: true,
-          message: 'Please check your code',
-          messageContent: 'Your code is incomplete or incorrect.',
-        },
-      });
-      return;
-    }
-
-    await verifyOTP({ phoneNumber: phoneNumber, code });
-  }, [otpDigitsValue, setNotification, signUpDetails.phoneNumber, verifyOTP]);
-
-  useEffect(() => {
-    if (verifyOTPError) {
-      setNotification({
-        default: {
-          visible: true,
-          message: 'Issue verifying your code',
-          messageContent: 'There was an issue verifying your code. Please double check your one-time passcode.',
-        },
-      });
-    }
-  }, [setNotification, verifyOTPError]);
+    await verifyOTP({ code: otpDigitsValue.current.join('') });
+  }, [otpDigitsValue, verifyOTP]);
 
   return (
     <RuumeOTPPageContainer keyboardShouldPersistTaps="handled" contentContainerStyle={{ flex: 1 }}>
