@@ -1,4 +1,6 @@
+import { logger } from '@Ruume/services/logging';
 import { profileService } from '@Ruume/services/profile';
+import { DispatcherKeys } from '@Ruume/types/logging';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -11,7 +13,7 @@ export const useGetAvatar = (fileName?: string | null) => {
         const data = await profileService.getAvatar(fileName!);
         return data;
       } catch (error) {
-        console.log('Error querying for avatar:', error);
+        logger.dispatch(DispatcherKeys.ERROR, 'useGetAvatar query failed', { error });
         throw error;
       }
     },

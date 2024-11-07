@@ -1,7 +1,9 @@
 import { useTransition } from '@Ruume/providers/TransitionsManager';
 import { authService } from '@Ruume/services/auth';
+import { logger } from '@Ruume/services/logging';
 import { notificationAtom } from '@Ruume/store';
 import { phoneNumberAtom } from '@Ruume/store/auth';
+import { DispatcherKeys } from '@Ruume/types/logging';
 import { SignUpType } from '@Ruume/types/services/auth';
 
 import { AuthError } from '@supabase/supabase-js';
@@ -23,11 +25,14 @@ export const useSignUpByPhone = () => {
 
         return data;
       } catch (error) {
-        console.log('Error signing up with phone:', error);
         throw error as AuthError;
       }
     },
-    onError: () => {
+    onError: (error, v) => {
+      logger.dispatch(DispatcherKeys.ERROR, 'Error signing up with phone', {
+        error,
+        phoneNumber: v.phoneNumber,
+      });
       setNotification({
         default: {
           visible: true,

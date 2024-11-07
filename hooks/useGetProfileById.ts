@@ -1,6 +1,8 @@
 import { queryClient } from '@Ruume/clients/react-query';
 import { useTransition } from '@Ruume/providers/TransitionsManager';
+import { logger } from '@Ruume/services/logging';
 import { profileService } from '@Ruume/services/profile';
+import { DispatcherKeys } from '@Ruume/types/logging';
 
 import { useQuery } from '@tanstack/react-query';
 
@@ -20,7 +22,7 @@ export const useGetProfileById = (userId?: string) => {
 
         return profile;
       } catch (error) {
-        console.error('An error occured getting a profile by id', error);
+        logger.dispatch(DispatcherKeys.ERROR, 'useGetProfileById query failed', { error });
         throw error;
       }
     },

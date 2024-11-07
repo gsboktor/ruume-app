@@ -1,4 +1,6 @@
 import { authService } from '@Ruume/services/auth';
+import { logger } from '@Ruume/services/logging';
+import { DispatcherKeys } from '@Ruume/types/logging';
 
 import { AuthError, Session } from '@supabase/supabase-js';
 import { useQuery } from '@tanstack/react-query';
@@ -11,7 +13,7 @@ export const useGetSession = () => {
         const session = await authService.getSession();
         return session;
       } catch (error) {
-        console.error('useGetSession query failed', error);
+        logger.dispatch(DispatcherKeys.ERROR, 'useGetSession query failed', { error });
         throw error as AuthError;
       }
     },
