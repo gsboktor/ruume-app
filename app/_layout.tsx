@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable simpleImportSort/imports */
-
 import 'react-native-get-random-values';
 
 import React from 'react';

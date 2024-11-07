@@ -1,10 +1,13 @@
 import { supabase } from '@Ruume/clients/supabase';
+import { DispatcherKeys } from '@Ruume/types/logging';
 import {
   AvatarBucketResponse,
   CreateProfileRequest,
   IProfileService,
   ProfileType,
 } from '@Ruume/types/services/profile';
+
+import { logger } from '../logging';
 
 import { PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
@@ -77,7 +80,7 @@ export class ProfileService implements IProfileService {
 
       return data;
     } catch (error) {
-      console.error('Failed to create profile: ', error);
+      logger.dispatch(DispatcherKeys.ERROR, 'Failed to create profile', { error });
       throw error;
     }
   }
@@ -92,7 +95,7 @@ export class ProfileService implements IProfileService {
 
       return data;
     } catch (error) {
-      console.error('Failed to get profile by id: ', error);
+      logger.dispatch(DispatcherKeys.ERROR, 'Failed to get profile by id', { error });
       throw error;
     }
   }

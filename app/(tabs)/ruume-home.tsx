@@ -2,6 +2,7 @@ import React, { useCallback, useContext } from 'react';
 import { Button, FlatList, Image, View } from 'react-native';
 
 import Settings from '@Ruume/assets/icons/settings.svg';
+import { supabase } from '@Ruume/clients/supabase';
 import { useGetProfileById, useGetSession } from '@Ruume/hooks';
 import { useGetAvatar } from '@Ruume/hooks/useGetAvatar';
 import { logger } from '@Ruume/services/logging';
@@ -25,8 +26,14 @@ export default function RuumeHome() {
   const { data: avatar, isPending: avatarLoading } = useGetAvatar(profile?.data?.[0]?.avatar_url);
 
   const mockSignOut = useCallback(async () => {
-    logger.dispatch(DispatcherKeys.ERROR, 'Signing out');
-  }, []);
+    logger.dispatch(DispatcherKeys.ERROR, 'Signing out', {
+      component: 'RuumeHome',
+      userId: session?.user?.id,
+      userMetadata: { ...session?.user?.user_metadata },
+      profileId: profile?.data?.[0]?.id,
+    });
+    await supabase.auth.signOut();
+  }, [profile?.data, session?.user?.id, session?.user?.user_metadata]);
 
   return (
     <StyledHomeContainer>

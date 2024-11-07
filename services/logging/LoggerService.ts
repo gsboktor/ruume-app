@@ -1,5 +1,4 @@
-import { Dispatcher } from '@Ruume/types/logging';
-import { DispatcherKeys } from '@Ruume/types/logging/DispatcherKeys';
+import { Dispatcher, DispatcherKeys } from '@Ruume/types/logging';
 
 import { consoleDispatcher } from './ConsoleDispatcher';
 

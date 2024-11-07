@@ -1,5 +1,8 @@
 import { useCallback } from 'react';
 
+import { logger } from '@Ruume/services/logging';
+import { DispatcherKeys } from '@Ruume/types/logging';
+
 import * as ImageManipulator from 'expo-image-manipulator';
 
 type ImageOptimizerProps = {
@@ -20,7 +23,7 @@ export const useImageOptimizer = ({
         });
         return optimizedImage;
       } catch (error) {
-        console.log('Error optimizing image:', error);
+        logger.dispatch(DispatcherKeys.ERROR, 'Error optimizing image', { error });
         throw error;
       }
     },

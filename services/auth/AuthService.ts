@@ -1,5 +1,8 @@
 import { supabase } from '@Ruume/clients/supabase';
+import { DispatcherKeys } from '@Ruume/types/logging';
 import { IAuthService, SignInType, SignUpType, VerifyOTPType } from '@Ruume/types/services/auth';
+
+import { logger } from '../logging';
 
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -41,7 +44,7 @@ export class AuthService implements IAuthService {
   async getUser() {
     const { data, error } = await this.client.auth.getUser();
     if (error) {
-      console.error('Error getting user', error);
+      logger.dispatch(DispatcherKeys.ERROR, 'Error getting user', { ...error });
       throw error;
     }
     return data.user;
@@ -50,7 +53,7 @@ export class AuthService implements IAuthService {
   async getSession() {
     const { data, error } = await this.client.auth.getSession();
     if (error) {
-      console.error('Error getting session', error);
+      logger.dispatch(DispatcherKeys.ERROR, 'Error getting session', { ...error });
       throw error;
     }
     return data.session;

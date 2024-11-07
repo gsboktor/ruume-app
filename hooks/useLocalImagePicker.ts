@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 
+import { logger } from '@Ruume/services/logging';
 import { notificationAtom } from '@Ruume/store';
+import { DispatcherKeys } from '@Ruume/types/logging';
 
 import { useImageOptimizer } from './useImageOptimizer';
 
@@ -71,7 +73,7 @@ export const useLocalImagePicker = ({ aspect }: UseLocalImagePickerProps) => {
           messageContent: 'There was an error picking the image. Please try again.',
         },
       });
-      console.error(e);
+      logger.dispatch(DispatcherKeys.ERROR, 'Error picking image', { e });
     } finally {
       setPickerLoading(false);
     }

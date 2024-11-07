@@ -1,5 +1,7 @@
 import { authService } from '@Ruume/services/auth';
+import { logger } from '@Ruume/services/logging';
 import { notificationAtom } from '@Ruume/store';
+import { DispatcherKeys } from '@Ruume/types/logging';
 import { SignInType } from '@Ruume/types/services/auth';
 
 import { AuthError } from '@supabase/supabase-js';
@@ -19,11 +21,11 @@ export const useSignInByPhone = () => {
 
         return data;
       } catch (error) {
-        console.log('Error signing in with phone:', error);
         throw error as AuthError;
       }
     },
-    onError: () => {
+    onError: (error, v) => {
+      logger.dispatch(DispatcherKeys.ERROR, 'Error signing in with phone', { error, phoneNumber: v.phoneNumber });
       setNotification({
         default: {
           visible: true,
