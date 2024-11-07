@@ -2,8 +2,8 @@ import { supabase } from '@Ruume/clients/supabase';
 import {
   AvatarBucketResponse,
   CreateProfileRequest,
-  CreateProfileType,
   IProfileService,
+  ProfileType,
 } from '@Ruume/types/services/profile';
 
 import { PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js';
@@ -37,7 +37,7 @@ export class ProfileService implements IProfileService {
     }
 
     const { data } = await this.client.storage.from('avatars').getPublicUrl(fileName, {
-      download: true,
+      download: 'true',
     });
 
     if (!data) {
@@ -51,7 +51,7 @@ export class ProfileService implements IProfileService {
     user_id,
     username,
     avatar_url,
-  }: CreateProfileRequest): Promise<PostgrestSingleResponse<CreateProfileType[]>> {
+  }: CreateProfileRequest): Promise<PostgrestSingleResponse<ProfileType[]>> {
     const createdAt = new Date().toISOString();
     const updatedAt = createdAt;
 
@@ -69,7 +69,7 @@ export class ProfileService implements IProfileService {
           updated_at: updatedAt,
         })
         .select()
-        .returns<CreateProfileType[]>();
+        .returns<ProfileType[]>();
 
       if (!data) {
         throw new Error();
@@ -78,6 +78,21 @@ export class ProfileService implements IProfileService {
       return data;
     } catch (error) {
       console.error('Failed to create profile: ', error);
+      throw error;
+    }
+  }
+
+  async getProfileById(id: string): Promise<PostgrestSingleResponse<ProfileType[]>> {
+    try {
+      const data = await this.client.from('profiles').select().eq('user_id', id).returns<ProfileType[]>();
+
+      if (!data) {
+        throw new Error('Error getting profile by id');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Failed to get profile by id: ', error);
       throw error;
     }
   }

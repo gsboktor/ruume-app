@@ -1,18 +1,22 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { ImageSourcePropType, KeyboardAvoidingView, ScrollView, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { ImageSourcePropType, ScrollView, View } from 'react-native';
+import Animated from 'react-native-reanimated';
 
 import PencilEditIcon from '@Ruume/assets/icons/pencil_edit.svg';
 import placeholderImg from '@Ruume/assets/images/placeholder.png';
-import { useLocalImagePicker, useUploadAvatar } from '@Ruume/hooks';
-import { useCreateProfile } from '@Ruume/hooks/useCreateProfile';
-import { useGetSession } from '@Ruume/hooks/useGetSession';
+import {
+  useCreateProfile,
+  useGetSession,
+  useKeyboardAvoiding,
+  useLocalImagePicker,
+  useUploadAvatar,
+} from '@Ruume/hooks';
+import { useTransition } from '@Ruume/providers/TransitionsManager';
 import { notificationAtom } from '@Ruume/store';
-import { hasInitedProfileAtom } from '@Ruume/store/profile';
 import { BaseText, ContinueSlider, FormField, ProfilePicturePicker } from '@Ruume/ui';
 import { vh } from '@Ruume/utils/viewport';
 
 import { SaveFormat } from 'expo-image-manipulator';
-import { router } from 'expo-router';
 import { useSetAtom } from 'jotai';
 import styled, { useTheme } from 'styled-components/native';
 
@@ -37,32 +41,35 @@ const StyledSlider = styled(View)`
   padding: 16px;
 `;
 
+const FormFieldWrapper = styled(Animated.View)`
+  width: 90%;
+  align-self: center;
+  position: absolute;
+`;
+
 export default function RuumeProfileSetup() {
   const theme = useTheme();
+  const mutatingRef = useRef(false);
+
+  const { enqueue } = useTransition();
+  const { animatedStyle } = useKeyboardAvoiding(vh * 22, 0.975);
 
   const { data: session } = useGetSession();
-  const {
-    mutate: uploadFn,
-    isError: uploadAvatarError,
-    isPending: uploadAvatarPending,
-    data: uploadAvatarData,
-  } = useUploadAvatar();
+  const { mutate: uploadFn, data: uploadAvatarData } = useUploadAvatar();
 
   const {
     mutateAsync: createProfileFn,
     isError: createProfileError,
     isPending: createProfilePending,
-    data: createProfileData,
   } = useCreateProfile(session?.user.id);
 
   const { pickImage, loading: pickerLoading } = useLocalImagePicker({ aspect: [1, 1] });
 
-  const [img, setImg] = useState<ImageSourcePropType>(placeholderImg);
+  const [img, setImg] = useState<ImageSourcePropType | undefined>(undefined);
   const [resetSlider, setResetSlider] = useState(false);
   const [name, setName] = useState('');
 
   const setNotification = useSetAtom(notificationAtom);
-  const setHasInitedProfile = useSetAtom(hasInitedProfileAtom);
 
   const getImageFromPicker = useCallback(async () => {
     const result = await pickImage();
@@ -82,44 +89,21 @@ export default function RuumeProfileSetup() {
     setResetSlider(false);
     if (createProfilePending) return;
 
-    await createProfileFn({
-      username: name,
-      avatar_url: uploadAvatarData?.path ?? null,
-    });
-  }, [createProfileFn, createProfilePending, name, uploadAvatarData?.path]);
-
-  useMemo(() => {
-    if (!uploadAvatarPending) {
-      if (uploadAvatarError) {
-        setNotification({
-          default: {
-            visible: true,
-            message: 'Error uploading avatar',
-            messageContent: 'Please try again',
-          },
-        });
-        setImg(placeholderImg);
-      }
+    if (!mutatingRef.current) {
+      mutatingRef.current = true;
+      await createProfileFn({
+        username: name,
+        avatar_url: uploadAvatarData?.path ?? null,
+      });
     }
-  }, [setNotification, uploadAvatarError, uploadAvatarPending]);
+  }, [createProfileFn, createProfilePending, name, uploadAvatarData?.path]);
 
   useEffect(() => {
     if (createProfileError) {
       setResetSlider(true);
-      setNotification({
-        default: {
-          visible: true,
-          message: 'Whoops! Something failed.',
-          messageContent: 'Sorry about that! Try again in a couple minutes.',
-        },
-      });
+      mutatingRef.current = false;
     }
-
-    if (!createProfilePending && createProfileData?.id && !createProfileError) {
-      setHasInitedProfile(true);
-      router.replace('/(tabs)/ruume-home');
-    }
-  }, [createProfileData?.id, createProfileError, createProfilePending, setHasInitedProfile, setNotification]);
+  }, [createProfileError, enqueue, setNotification]);
 
   return (
     <>
@@ -140,12 +124,7 @@ export default function RuumeProfileSetup() {
             />
           </View>
         </RuumeProfileMainContent>
-        <KeyboardAvoidingView
-          behavior="padding"
-          enabled
-          keyboardVerticalOffset={vh * 16}
-          style={{ width: '90%', alignSelf: 'center', position: 'absolute', bottom: vh * 22 }}
-        >
+        <FormFieldWrapper style={animatedStyle}>
           <FormField
             placeholder="What do we call you?"
             Icon={PencilEditIcon}
@@ -155,10 +134,10 @@ export default function RuumeProfileSetup() {
             inputMode="text"
             header={'Name'}
             maxLength={12}
-            style={{ fontSize: 16, color: theme?.text, paddingRight: 8 }}
+            style={{ fontSize: 16, color: theme?.text, paddingRight: 8, width: '100%' }}
             validationMessage={`${name.length} / 12`}
           />
-        </KeyboardAvoidingView>
+        </FormFieldWrapper>
       </RuumeProfileSetupContainer>
       <StyledSlider>
         <ContinueSlider
@@ -170,7 +149,6 @@ export default function RuumeProfileSetup() {
           }}
           onSlideComplete={handleSubmit}
           reset={resetSlider}
-          loading={createProfilePending}
         />
       </StyledSlider>
     </>

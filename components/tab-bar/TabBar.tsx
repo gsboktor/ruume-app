@@ -1,25 +1,32 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
 import Animated, { useSharedValue, withSpring } from 'react-native-reanimated';
+
+import { vh } from '@Ruume/utils/viewport';
 
 import TabBarItem from './TabBarItem';
 
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import styled from 'styled-components/native';
 
-const BarContainer = styled(View)`
-  position: relative;
-  background-color: #000;
+const BarContainer = styled(Animated.View)`
+  position: absolute;
+  bottom: -16px;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: ${vh * 21.5}px;
+  background-color: ${({ theme }) => theme?.background};
+  box-shadow: 0px -24px 16px rgba(0, 0, 0, 1);
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
 `;
 
 const StyledTabBarContainer = styled(Animated.View)`
   display: flex;
   flex-direction: row;
   position: absolute;
-  bottom: 56px;
+  bottom: ${vh * 7.5}px;
   align-items: center;
 `;
 
@@ -32,8 +39,8 @@ export default function TabBar({ state, descriptors, navigation }: TabBarProps) 
   }, [yPosition]);
 
   return (
-    <BarContainer>
-      <StyledTabBarContainer style={{ transform: [{ translateY: yPosition }] }}>
+    <BarContainer style={{ transform: [{ translateY: yPosition }] }}>
+      <StyledTabBarContainer>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;

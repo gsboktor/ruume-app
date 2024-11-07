@@ -1,4 +1,4 @@
-import { queryClient } from '@Ruume/clients/react-query';
+// import { queryClient } from '@Ruume/clients/react-query';
 import { supabase } from '@Ruume/clients/supabase';
 import { FormType } from '@Ruume/types/forms';
 
@@ -9,7 +9,7 @@ import { atomEffect } from 'jotai-effect';
 
 export const authStateAtomEffect = atomEffect((_, set) => {
   const unsubscribe = supabase.auth.onAuthStateChange((_event) => {
-    queryClient.invalidateQueries({ queryKey: ['session'] });
+    // queryClient.invalidateQueries({ queryKey: ['session'] });
     switch (_event) {
       case 'SIGNED_IN':
         router.replace('/');

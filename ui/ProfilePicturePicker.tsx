@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, ImageSourcePropType, View, ViewProps } from 'react-native';
 
 import AddCircleIcon from '@Ruume/assets/icons/add.svg';
+import placeholderImg from '@Ruume/assets/images/placeholder.png';
 
 import { HapticPressable } from './HapticPressable';
 import { LoadingIndicator } from './LoadingIndicator';
@@ -11,7 +12,7 @@ import styled, { useTheme } from 'styled-components/native';
 
 type ProfilePicturePickerProps = {
   onAddPicture: () => void;
-  img: ImageSourcePropType;
+  img?: ImageSourcePropType;
   loading: boolean;
 } & ViewProps;
 
@@ -36,7 +37,12 @@ const ProfileImage = styled(Image)`
   border-radius: 100px;
 `;
 
-export const ProfilePicturePicker = ({ onAddPicture, img, loading = false, ...rest }: ProfilePicturePickerProps) => {
+export const ProfilePicturePicker = ({
+  onAddPicture,
+  img = placeholderImg,
+  loading = false,
+  ...rest
+}: ProfilePicturePickerProps) => {
   const theme = useTheme();
   return (
     <HapticPressable
@@ -46,7 +52,7 @@ export const ProfilePicturePicker = ({ onAddPicture, img, loading = false, ...re
     >
       <ProfilePickerWrapper {...rest}>
         <ProfilePictureContainer>
-          {!loading ? <ProfileImage source={img} /> : <LoadingIndicator inverted />}
+          {!loading ? <ProfileImage source={img} testID="profile-image" /> : <LoadingIndicator inverted />}
         </ProfilePictureContainer>
         <AddCircleIcon
           width={62}

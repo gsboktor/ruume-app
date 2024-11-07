@@ -23,6 +23,7 @@ export default function AuthLayout() {
           <Stack.Screen name="ruume-sign-up-page" />
           <Stack.Screen name="ruume-sign-in-page" />
           <Stack.Screen name="ruume-otp-page" />
+          <Stack.Screen name="ruume-profile-setup" />
         </Stack>
       </FormProvider>
     </SafeAreaView>

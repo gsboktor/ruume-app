@@ -1,12 +1,12 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useCallback } from 'react';
+import { Keyboard, Text, View } from 'react-native';
 
 import { formTypeAtom } from '@Ruume/store/auth';
 import { FormType } from '@Ruume/types/forms';
-import { BaseText } from '@Ruume/ui';
+import { BaseText, HapticPressable } from '@Ruume/ui';
 
 import * as Haptics from 'expo-haptics';
-import { Href, Link } from 'expo-router';
+import { Href, router } from 'expo-router';
 import { useSetAtom } from 'jotai';
 import styled from 'styled-components';
 
@@ -27,7 +27,7 @@ const FormSwitcherText = styled(BaseText)`
   color: ${({ theme }) => theme?.textLightGray};
 `;
 
-const FormSwitcherLink = styled(Link)`
+const FormSwitcherLink = styled(Text)`
   font-size: 12px;
   color: ${({ theme }) => theme?.text};
   text-decoration-line: underline;
@@ -35,19 +35,21 @@ const FormSwitcherLink = styled(Link)`
 
 export const RuumeFormSwitcher = ({ primaryLabel, secondaryLabel, href, formType }: RuumeFormSwitcherProps) => {
   const setFormType = useSetAtom(formTypeAtom);
+  const onPress = useCallback(() => {
+    if (Keyboard.isVisible()) {
+      Keyboard.dismiss();
+      return;
+    }
+    setFormType(formType);
+    router.navigate(href);
+  }, [formType, setFormType, href]);
 
   return (
     <FormSwitcherContainer>
       <FormSwitcherText>{primaryLabel}</FormSwitcherText>
-      <FormSwitcherLink
-        href={href}
-        onPress={() => {
-          setFormType(formType);
-          Haptics.selectionAsync();
-        }}
-      >
-        {secondaryLabel}
-      </FormSwitcherLink>
+      <HapticPressable onPress={onPress} hapticWeight={Haptics.ImpactFeedbackStyle.Light}>
+        <FormSwitcherLink>{secondaryLabel}</FormSwitcherLink>
+      </HapticPressable>
     </FormSwitcherContainer>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SubmitErrorHandler, SubmitHandler, useFormContext } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 
@@ -26,7 +26,7 @@ const AuthPageContainer = styled(View)`
 export default function RuumeSignInPage() {
   const theme = useTheme();
 
-  const { mutate: signInUser, isPending: signInUserLoading, error: signInUserError } = useSignInByPhone();
+  const { mutate: signInUser, isPending: signInUserLoading } = useSignInByPhone();
 
   const setNotification = useSetAtom(notificationAtom);
 
@@ -47,18 +47,6 @@ export default function RuumeSignInPage() {
     });
   };
 
-  useEffect(() => {
-    if (signInUserError) {
-      setNotification({
-        default: {
-          visible: true,
-          message: 'We encountered an issue',
-          messageContent: signInUserError.message,
-        },
-      });
-    }
-  }, [setNotification, signInUserError]);
-
   return (
     <AuthPageContainer>
       <SignInForm />
@@ -66,7 +54,7 @@ export default function RuumeSignInPage() {
         label={'Sign in'}
         handleSubmit={handleSubmit(onSubmit, onError)}
         isLoading={signInUserLoading}
-        offset={vh * 17.5}
+        offset={vh * 16}
       />
       <RuumeAuthDisclaimer
         primaryText="Signing up with a phone number will require a verification code."

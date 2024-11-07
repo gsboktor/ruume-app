@@ -10,12 +10,21 @@ const PageLoaderContainer = styled(View)`
   flex: 1;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: ${({ theme }) => theme.background};
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 `;
 
 export const PageLoader = () => {
   return (
     <PageLoaderContainer>
-      <LoadingIndicator size={LoaderIndicatorSizes.lg} />
+      <LoadingIndicator size={LoaderIndicatorSizes.lg} inverted />
     </PageLoaderContainer>
   );
 };

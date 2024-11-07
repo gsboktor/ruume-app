@@ -25,7 +25,7 @@ const FormFieldMainContent = styled(Pressable)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: '100%';
+  /* width: '100%'; */
   gap: 8px;
 `;
 
