@@ -69,7 +69,12 @@ const LoadingIndicatorContainer = styled(View)`
   z-index: 100;
 `;
 
-export const ContinueSlider = ({ onSlideComplete, reset, disabled, notification }: ContinueSliderProps) => {
+export const ContinueSlider = ({
+  onSlideComplete,
+  reset,
+  disabled,
+  notification,
+}: ContinueSliderProps) => {
   const theme = useTheme();
 
   const [maxWidth, setMaxWidth] = useState(0);
@@ -123,7 +128,10 @@ export const ContinueSlider = ({ onSlideComplete, reset, disabled, notification 
     runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Medium);
     runOnJS(onSlideComplete)();
 
-    outerScale.value = withSequence(withTiming(1.2, { duration: 200 }), withSpring(1, { damping: 10, stiffness: 100 }));
+    outerScale.value = withSequence(
+      withTiming(1.2, { duration: 200 }),
+      withSpring(1, { damping: 10, stiffness: 100 }),
+    );
     scale.value = withSpring(1.175);
     width.value = withTiming(maxWidth, { duration: 200, easing: Easing.elastic(0.75) });
     iconOpacity.value = withTiming(0, { duration: 400 });
@@ -226,7 +234,12 @@ export const ContinueSlider = ({ onSlideComplete, reset, disabled, notification 
                   {disabled ? (
                     <Cancel width={32} height={32} fill={theme?.textSubtle} testID="cancel-icon" />
                   ) : (
-                    <ArrowSlim width={48} height={48} fill={theme?.background} testID="arrow-icon" />
+                    <ArrowSlim
+                      width={48}
+                      height={48}
+                      fill={theme?.background}
+                      testID="arrow-icon"
+                    />
                   )}
                 </>
               )}

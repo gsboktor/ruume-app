@@ -14,7 +14,7 @@ const PageLoaderContainer = styled(View)`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: ${({ theme }) => theme.background};
+  background-color: rgba(0, 0, 0, 0.2);
   top: 0;
   left: 0;
   right: 0;

@@ -13,7 +13,7 @@ export const useGetAvatar = (fileName?: string | null) => {
         const data = await profileService.getAvatar(fileName!);
         return data;
       } catch (error) {
-        logger.dispatch(DispatcherKeys.ERROR, 'useGetAvatar query failed', { error });
+        logger.dispatch('useGetAvatar query failed', DispatcherKeys.ERROR, { error });
         throw error;
       }
     },

@@ -1,6 +1,6 @@
 import { supabase } from '@Ruume/clients/supabase';
 import { DispatcherKeys } from '@Ruume/types/logging';
-import { IAuthService, SignInType, SignUpType, VerifyOTPType } from '@Ruume/types/services/auth';
+import { IAuthService, SignInResponse, SignInType, SignUpType, VerifyOTPType } from '@Ruume/types/services/auth';
 
 import { logger } from '../logging';
 
@@ -17,34 +17,52 @@ export class AuthService implements IAuthService {
   async signUpWithPhone(signUpPayload: SignUpType) {
     const phoneNumber = '+1' + signUpPayload.phoneNumber.replace(/\D+/g, '');
 
-    return await this.client.auth.signUp({
+    const { data, error } = await this.client.auth.signUp({
       phone: phoneNumber,
       password: signUpPayload.password,
       options: {
         channel: 'sms',
       },
     });
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
   }
 
-  async signInWithPhone(signInPayload: SignInType) {
-    return await this.client.auth.signInWithPassword({
+  async signInWithPhone(signInPayload: SignInType): Promise<SignInResponse> {
+    const { data, error } = await this.client.auth.signInWithPassword({
       phone: '+1' + signInPayload.phoneNumber.replace(/\D+/g, ''),
       password: signInPayload.password,
     });
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
   }
 
   async verifyOTP(verifyOTPPayload: VerifyOTPType) {
-    return await this.client.auth.verifyOtp({
+    const { data, error } = await this.client.auth.verifyOtp({
       phone: verifyOTPPayload.phoneNumber,
       token: verifyOTPPayload.code,
       type: 'sms',
     });
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
   }
 
   async getUser() {
     const { data, error } = await this.client.auth.getUser();
     if (error) {
-      logger.dispatch(DispatcherKeys.ERROR, 'Error getting user', { ...error });
+      logger.dispatch('Error getting user', DispatcherKeys.ERROR, { ...error });
       throw error;
     }
     return data.user;
@@ -53,7 +71,7 @@ export class AuthService implements IAuthService {
   async getSession() {
     const { data, error } = await this.client.auth.getSession();
     if (error) {
-      logger.dispatch(DispatcherKeys.ERROR, 'Error getting session', { ...error });
+      logger.dispatch('Error getting session', DispatcherKeys.ERROR, { ...error });
       throw error;
     }
     return data.session;

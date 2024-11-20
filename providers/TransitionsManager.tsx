@@ -24,7 +24,7 @@ export const TransitionsManager = ({ children }: TransitionManagerProps) => {
   const setFormType = useSetAtom(formTypeAtom);
 
   const enqueueTransition = useCallback((href: Href) => {
-    router.push(href);
+    router.replace(href);
   }, []);
 
   useEffect(() => {

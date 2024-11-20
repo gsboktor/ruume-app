@@ -5,7 +5,7 @@ import { consoleDispatcher } from './ConsoleDispatcher';
 export class LoggerService {
   constructor(private readonly dispatcher: Dispatcher) {}
 
-  dispatch(severity: DispatcherKeys, message: string, extras?: Record<string, unknown>) {
+  dispatch(message: string, severity: DispatcherKeys = DispatcherKeys.LOG, extras?: Record<string, unknown>) {
     this.dispatcher.dispatch[severity](message, extras);
   }
 }

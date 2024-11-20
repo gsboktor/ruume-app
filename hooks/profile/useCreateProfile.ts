@@ -3,8 +3,10 @@ import { logger } from '@Ruume/services/logging';
 import { profileService } from '@Ruume/services/profile';
 import { notificationAtom } from '@Ruume/store';
 import { DispatcherKeys } from '@Ruume/types/logging';
-import { CreateProfileRequest } from '@Ruume/types/services/profile';
+import { CreateProfileRequest, ProfileType } from '@Ruume/types/services/profile';
+import { tryAsync } from '@Ruume/utils/tryAsync';
 
+import { PostgrestError } from '@supabase/supabase-js';
 import { useMutation } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 
@@ -12,23 +14,19 @@ export const useCreateProfile = (uid?: string) => {
   const setNotification = useSetAtom(notificationAtom);
   const { enqueue } = useTransition();
 
-  return useMutation({
-    mutationFn: async (payload: Omit<CreateProfileRequest, 'user_id'>) => {
-      {
-        if (!uid) {
-          throw new Error('No uid provided');
-        }
-
-        const profileRes = await profileService.createProfile({ ...payload, user_id: uid });
-
-        //TODO: Create a custom error class that accepts a message, status code, and "action"
-        //TODO: Add Status Code enum
-        if (profileRes.status >= 400) {
-          throw new Error('Response returned a non-200 code');
-        }
-        return profileRes.data?.[0];
-      }
-    },
+  return useMutation<ProfileType | undefined, PostgrestError | Error, Omit<CreateProfileRequest, 'user_id'>>({
+    mutationFn: async (payload: Omit<CreateProfileRequest, 'user_id'>) =>
+      await tryAsync<ProfileType, PostgrestError | Error>(
+        () => {
+          if (!uid) {
+            throw new Error('No uid provided');
+          }
+          return profileService.createProfile({ ...payload, user_id: uid });
+        },
+        (err) => {
+          throw err;
+        },
+      ),
     retry: 1,
     onSuccess: (data) => {
       if (data?.id) {
@@ -38,7 +36,7 @@ export const useCreateProfile = (uid?: string) => {
       }
     },
     onError: (error) => {
-      logger.dispatch(DispatcherKeys.ERROR, 'useCreateProfile mutation failed', { ...error });
+      logger.dispatch('useCreateProfile mutation failed', DispatcherKeys.ERROR, { ...error });
       if (!uid) {
         enqueue('/(auth)/ruume-sign-in-page');
       }
