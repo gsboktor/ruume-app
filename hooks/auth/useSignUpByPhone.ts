@@ -4,7 +4,8 @@ import { logger } from '@Ruume/services/logging';
 import { notificationAtom } from '@Ruume/store';
 import { phoneNumberAtom } from '@Ruume/store/auth';
 import { DispatcherKeys } from '@Ruume/types/logging';
-import { SignUpType } from '@Ruume/types/services/auth';
+import { SignUpResponse, SignUpType } from '@Ruume/types/services/auth';
+import { tryAsync } from '@Ruume/utils/tryAsync';
 
 import { AuthError } from '@supabase/supabase-js';
 import { useMutation } from '@tanstack/react-query';
@@ -17,19 +18,15 @@ export const useSignUpByPhone = () => {
 
   return useMutation({
     mutationFn: async (signUpPayload: SignUpType) => {
-      try {
-        const { data, error } = await authService.signUpWithPhone(signUpPayload);
-        if (error) {
-          throw error;
-        }
-
-        return data;
-      } catch (error) {
-        throw error as AuthError;
-      }
+      return await tryAsync<SignUpResponse, AuthError>(
+        () => authService.signUpWithPhone(signUpPayload),
+        (err) => {
+          throw err;
+        },
+      );
     },
     onError: (error, v) => {
-      logger.dispatch(DispatcherKeys.ERROR, 'Error signing up with phone', {
+      logger.dispatch('Error signing up with phone', DispatcherKeys.ERROR, {
         error,
         phoneNumber: v.phoneNumber,
       });
@@ -42,7 +39,7 @@ export const useSignUpByPhone = () => {
       });
     },
     onSuccess: (data) => {
-      setPhoneNumber(data.user?.phone ?? '');
+      setPhoneNumber(data?.user?.phone ?? '');
       enqueue('/(auth)/ruume-otp-page');
     },
     retry: 2,

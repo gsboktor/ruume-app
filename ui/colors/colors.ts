@@ -7,6 +7,7 @@ export const Colors = {
   textLightGray: '#8A8A8A',
   backgroundGray: 'rgba(64, 64, 64, 0.7)',
   semiTransparentGray: 'rgba(17, 17, 17, 0.86)',
+  systemBackgroundGray: '#101010',
   pingRed: '#BE0000',
   green: '#008615',
 };

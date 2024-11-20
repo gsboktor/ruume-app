@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useGetSession } from '@Ruume/hooks/useGetSession';
+import { useGetSession } from '@Ruume/hooks';
 
 import { Redirect } from 'expo-router';
 

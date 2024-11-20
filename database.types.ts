@@ -61,6 +61,83 @@ export type Database = {
         }
         Relationships: []
       }
+      ruume_members: {
+        Row: {
+          id: string
+          joined_at: string
+          member_id: string
+          ruume_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string
+          member_id: string
+          ruume_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string
+          member_id?: string
+          ruume_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ruume_members_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ruume_members_ruume_id_fkey"
+            columns: ["ruume_id"]
+            isOneToOne: false
+            referencedRelation: "ruumes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ruumes: {
+        Row: {
+          anthem: string | null
+          anthem_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          anthem?: string | null
+          anthem_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          owner_id: string
+          updated_at?: string
+        }
+        Update: {
+          anthem?: string | null
+          anthem_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ruumes_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

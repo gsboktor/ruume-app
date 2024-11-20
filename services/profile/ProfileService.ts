@@ -9,7 +9,7 @@ import {
 
 import { logger } from '../logging';
 
-import { PostgrestSingleResponse, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 
 export class ProfileService implements IProfileService {
@@ -50,18 +50,14 @@ export class ProfileService implements IProfileService {
     return data.publicUrl;
   }
 
-  async createProfile({
-    user_id,
-    username,
-    avatar_url,
-  }: CreateProfileRequest): Promise<PostgrestSingleResponse<ProfileType[]>> {
+  async createProfile({ user_id, username, avatar_url }: CreateProfileRequest): Promise<ProfileType> {
     const createdAt = new Date().toISOString();
     const updatedAt = createdAt;
 
     const profile_id = uuidv4();
 
     try {
-      const data = await this.client
+      const { data, error } = await this.client
         .from('profiles')
         .insert({
           id: profile_id,
@@ -72,30 +68,40 @@ export class ProfileService implements IProfileService {
           updated_at: updatedAt,
         })
         .select()
-        .returns<ProfileType[]>();
+        .returns<ProfileType[]>()
+        .single();
+
+      if (error) {
+        throw error;
+      }
 
       if (!data) {
-        throw new Error();
+        throw new Error('Error creating profile');
       }
 
       return data;
     } catch (error) {
-      logger.dispatch(DispatcherKeys.ERROR, 'Failed to create profile', { error });
+      logger.dispatch('Failed to create profile', DispatcherKeys.ERROR, { error });
       throw error;
     }
   }
 
-  async getProfileById(id: string): Promise<PostgrestSingleResponse<ProfileType[]>> {
+  async getProfileById(id: string): Promise<ProfileType | null> {
     try {
-      const data = await this.client.from('profiles').select().eq('user_id', id).returns<ProfileType[]>();
+      const { data, error } = await this.client
+        .from('profiles')
+        .select()
+        .eq('user_id', id)
+        .returns<ProfileType[]>()
+        .maybeSingle();
 
-      if (!data) {
-        throw new Error('Error getting profile by id');
+      if (error) {
+        throw error;
       }
 
       return data;
     } catch (error) {
-      logger.dispatch(DispatcherKeys.ERROR, 'Failed to get profile by id', { error });
+      logger.dispatch('Failed to get profile by id', DispatcherKeys.ERROR, { error });
       throw error;
     }
   }
